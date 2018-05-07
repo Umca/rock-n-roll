@@ -5,8 +5,304 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Rock'n'roll</title>
+
+    <style>
+        #text-line{
+            resize: horizontal;
+        }
+        #accord-line{
+            width: 20vw;
+            height: 5vw;
+            border: 1px solid blue;
+        }
+        #new-accord{
+            width: 5vw;
+        }
+        .draggable{
+            position: absolute;
+        }
+        .angle{
+            background: black;
+            width: 5px;
+            height: 5px;
+            display: block;
+            position: absolute;
+        }
+    </style>
 </head>
 <body>
-    
+    <div id='working-field'>
+        <div id='ctrl-buttons'>
+            <button id='download'>download</button>
+            <button id='edit'>edit</button>
+            <button id='save'>save</button>
+        </div>
+
+        <div id='line'>
+            <div id='accord-field' ondrop='drop(event)' ondragover='allowDrop(event)'>
+                <div id='accord-line' class='droppable'>
+                </div>
+                <input type='text' id='new-accord' placeholder='accord'></input>
+                <button id='add-accord' onclick='addAccord()'>add acord</button>
+                
+            </div>
+            <textarea rows='2' cols='45' name='text-line'
+                placeholder="Add line of song..."
+                id='text-line'
+            ></textarea>
+
+            <input type='file' id='files' name='song' onchange='handleFiles(event)'>
+        </div>
+    </div>
+
+    <script>
+        function handleFiles(ev){
+            let files = ev.target.files
+            for(let i = 0; i< files.length; i++){
+                let f = files[i]
+                if(!f.name.match(/json/)){
+                    return
+                }
+
+                const reader = new FileReader()
+
+                reader.onload = function(evt) {
+                    console.log(evt)
+                    if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                        console.log(evt.target.result)
+                    }
+                };
+
+                 reader.readAsBinaryString(f);
+
+                // var blob = file.slice(start, stop + 1);
+                // reader.readAsBinaryString(blob);
+            }
+            
+        }
+        addDraggableAngle()
+        function readNewAccord(){
+            return document.getElementById('new-accord').value
+        }
+        
+        function createElWithNewAccord(text, parent){
+            let span = document.createElement('span')
+            span.textContent = text
+            span.id = `text_${Date.now()}`
+            span.style.border = '1px solid red'
+            span.classList.add('draggable')
+            span.draggable = true
+            parent.appendChild(span)
+            span.addEventListener('dragstart', drag)
+        }
+        
+        function addAccord(){
+            let accord = readNewAccord()
+            if(!accord) return
+            createElWithNewAccord(accord, document.querySelector('#accord-line'))
+            cleanInput(document.getElementById('new-accord'))
+        }
+        
+        function cleanInput(input){
+            input.value = ''
+        }
+
+        let dragObject = {}
+        let resizeDiv = {}
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+            dragObject.downX = ev.pageX
+            dragObject.downY = ev.pageY
+
+            let coords = getCoords(ev.target)
+            dragObject.shiftX = dragObject.downX - coords.left
+            dragObject.shiftY = dragObject.downY - coords.top
+
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            let draggable = document.getElementById(data)
+            draggable.style.left = ev.pageX - dragObject.shiftX + 'px'
+            draggable.style.top = ev.pageY - dragObject.shiftY + 'px'
+            dragObject = {}
+
+        }
+
+        function resizeAccordLine(){
+
+        }
+        function addDraggableAngle(){
+            const el = document.getElementById('accord-line')
+            const angle = document.createElement('div')
+            angle.classList.add('angle')
+            el.appendChild(angle)
+            let elData = el.getBoundingClientRect()
+            let angleData = angle.getBoundingClientRect()
+            angle.style.left = `${Math.round(elData.width + elData.left) - angleData.width}px`
+            angle.style.top = `${Math.round(elData.height + elData.top) - angleData.height}px`
+        }
+
+        function handleMouseMove(ev){
+            console.log(ev)
+            let el = document.querySelector('.angle')
+            let div = el.parentElement
+           
+            div.style.width = `${(ev.pageX - div.getBoundingClientRect().left)}px`
+            el.style.left = `${(ev.pageX - div.getBoundingClientRect().left) + el.getBoundingClientRect().width}px`
+        }
+
+        document.addEventListener('mousedown', (ev)=>{
+            if(ev.which == 1 && ev.target.classList.contains('angle')){
+                resizeDiv.downX = ev.pageX
+                resizeDiv.downY = ev.pageY
+
+                document.addEventListener('mousemove', handleMouseMove)
+            }  
+        })
+
+        document.addEventListener('mouseup', (ev) => document.removeEventListener('mousemove', handleMouseMove))
+
+        // Check for the various File API support.
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+        // Great success! All the File APIs are supported.
+        } else {
+        alert('The File APIs are not fully supported in this browser.');
+        }
+
+        // document.getElementById('angle').addEventListener('mousedown', (ev)=>{
+
+        // if(ev.which == 1 && Object.keys(dragObject).length == 0 ){
+        //     const el = ev.target.closest('.angle')
+        //     console.log(ev)
+
+        //     document.addEventListener('mousemove', (ev) => {
+                
+        //     })
+
+        // }  
+        // })
+
+
+        // let dragObject = {}
+
+        // document.onmousedown  = function(e){
+
+        //     if(e.which != 1){
+        //         return
+        //     }
+
+        //     const el = e.target.closest('.draggable')
+            
+        //     if(!el) return
+
+        //     dragObject.elem = el
+
+        //     dragObject.downX = e.pageX 
+        //     dragObject.downY = e.pageY 
+        // }
+
+        // document.onmousemove = function(e){
+        //     if(!dragObject.elem) return
+
+        //     if(!dragObject.avatar){
+        //         let moveX = e.pageX - dragObject.downX
+        //         let moveY = e.pageY - dragObject.downY
+
+        //         if(Math.abs(moveX) < 3 && Math.abs(moveY) < 3) return
+
+        //         dragObject.avatar =  createAvatar(e)
+
+        //         if(!dragObject.avatar){
+        //             dragObject.avatar = {}
+        //             return
+        //         }
+
+        //         let coords = getCoords(dragObject.avatar)
+        //         dragObject.shiftX = dragObject.downX - coords.left
+        //         dragObject.shiftY = dragObject.downY - coords.top 
+
+        //         startDrag(e)
+        //     }
+
+        //     dragObject.avatar.style.left = e.pageX - dragObject.shiftX + 'px'
+        //     dragObject.avatar.style.top = e.pageY - dragObject.shiftY + 'px'
+
+        //     return false
+        // }
+
+        // document.onmouseup = function(e){
+        //     if(dragObject.avatar){
+        //         finishDrag(e)
+        //     }
+
+        //     dragObject ={}
+        // }
+
+        function getCoords(el){
+            return el.getBoundingClientRect()
+        }
+
+        // function createAvatar(e){
+        //     const avatar = dragObject.elem
+        //     const old = {
+        //         parent: avatar.parentNode,
+        //         nextSibling: avatar.nextSibling,
+        //         position: avatar.position || '',
+        //         left: avatar.left || '',
+        //         top: avatar.top || '',
+        //         zIndex: avatar.zIndex || ''
+        //     }
+
+        //     avatar.rollback = function(){
+        //         old.parent.insertBefore(avatar, old.nextSibling)
+        //         avatar.style.position = old.position
+        //         avatar.style.left = old.left
+        //         avatar.style.top = old.top
+        //         avatar.style.zIndex = old.zIndex
+        //     }
+
+        //     return avatar
+        // }
+
+        // function startDrag(e){
+        //     const avatar = dragObject.avatar
+
+        //     document.body.appendChild(avatar)
+        //     avatar.style.position = 'absolute'
+        //     avatar.style.zIndex = 9999
+
+        // }
+
+        // function finishDrag(e){
+        //     const dropElem = findDroppable(e)
+
+        //     if(dropElem){
+        //         console.log(dropElem)
+        //         dropElem.appendChild(dragObject.elem)
+        //         // dragObject.avatar.hidden= true
+
+        //     } else {
+        //         dragObject.avatar.rollback()
+        //     }
+        // }
+
+        // function findDroppable(e){
+        //     dragObject.avatar.hidden = true
+        //     const el = document.elementFromPoint(e.clientX, e.clientY)
+        //     dragObject.avatar.hidden = false
+            
+        //     if(el == null){
+        //         return null
+        //     }
+        //     return el.closest('.droppable')
+        // }
+    </script>
 </body>
 </html>
