@@ -1,4 +1,3 @@
-
 <template>
 <div class='relative'>
     <tooltip :isShown=isTooltip></tooltip>
@@ -11,10 +10,17 @@
                 @click = 'showTooltip'
                
             >
-                <span v-for='acc in accords' :key='acc' 
-                draggable='true' 
-                class='draggable' 
-                v-on:dragstart="dragstart">{{acc}}</span>
+            <drag-item v-for='acc in accords' :key='acc' 
+                :id = 'acc+ "_" +Date.now()'
+                :text=acc
+                :handleDrag='dragstart'
+                :coords=coords
+                :handleDblclick='handleDblclick'
+            >
+
+            </drag-item>
+                
+
             </div>
         </div>
         <textarea rows=''
@@ -24,12 +30,12 @@
             id='text-line'
             @keyup="handleTextUpdate"
         ></textarea>
-        <!-- <img src='../images/click.png'/> -->
     </div>
 </div>
 </template>
 <script>
 import Tooltip from './Tooltip'
+import DragItem from './DragItem'
 export default {
     data(){
         return {
@@ -38,73 +44,38 @@ export default {
             lineOfSong: '',
             isTooltip: false,
             coords: {},
-            accords: []
+            accords: ['Dm'],
+            toDrag: undefined
 
         }
     },
     components: {
-        'tooltip': Tooltip
+        'tooltip': Tooltip,
+        'drag-item': DragItem
+    },
+    mounted(){
+        // this.addDraggableAngle()
+        // this.resizeAccordLine()
+
+        this.$on('close', val => {
+            this.isTooltip = false
+            this.chosenAccord = val.tone+val.type
+        })
+
+        this.$on('add', val => {
+            this.isTooltip = false
+            this.chosenAccord = val.tone+val.type
+
+            this.addAccord()
+        })
     },
     methods: {
         handleChange(e){
             this.chosenAccord = e.target.value
         },
-
-        addDraggableAngle(){
-            const el = document.getElementById('accord-line')
-            const angle = document.createElement('div')
-            angle.classList.add('angle')
-            el.appendChild(angle)
-
-            let elData = el.getBoundingClientRect()
-            let angleData = angle.getBoundingClientRect()
-
-            angle.style.left = `${Math.round(elData.width + elData.left) - angleData.width}px`
-            angle.style.top = `${Math.round(elData.height + elData.top) - angleData.height}px`
-        },
-
-        resizeAccordLine(){  
-            document.addEventListener('mousedown', (ev)=>{
-                if(ev.which == 1 && ev.target.classList.contains('angle')){
-
-                    document.addEventListener('mousemove', this.handleMouseMove)
-                }  
-            })
-
-            document.addEventListener('mouseup', (ev) => document.removeEventListener('mousemove', this.handleMouseMove))
-        },
-
-        handleMouseMove(ev){
-            let el = document.querySelector('.angle')
-            let div = el.parentElement
-           
-            div.style.width = `${(ev.pageX - div.getBoundingClientRect().left)}px`
-            el.style.left = `${(ev.pageX - div.getBoundingClientRect().left) + el.getBoundingClientRect().width}px`
-        },
-
-        createElWithNewAccord(text, parent){
-            let span = document.createElement('span')
-            span.textContent = text
-            span.id = `text_${Date.now()}`
-            span.style.border = '1px solid red'
-            span.classList.add('draggable')
-            span.draggable = true
-            parent.appendChild(span)
-
-            let spanData = this.getCoords(span)
-
-            span.style.left = `${this.coords.pageX - spanData.width / 2 -spanData.left }px`
-            span.style.top = `${this.coords.pageY - spanData.height / 2 - spanData.top }px`
-
-            span.addEventListener('dragstart', this.drag)
-            span.addEventListener('dblclick', (e) => {
-                console.log(e)
-            })
-        },
         
         addAccord(){
             this.accords.push(this.chosenAccord)
-            // this.createElWithNewAccord(this.chosenAccord, document.querySelector('#accord-line'))
             this.chosenAccord = ''
         },
 
@@ -113,8 +84,7 @@ export default {
         },
 
         dragstart(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-            console.log(ev.dataTransfer)
+            this.toDrag = ev.target.id
             this.dragObject.downX = ev.pageX
             this.dragObject.downY = ev.pageY
             let coords = this.getCoords(ev.target)
@@ -123,12 +93,8 @@ export default {
         },
 
         drop(ev){
-            debugger
             ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            console.log(data)
-            let draggable = document.getElementById(data)
-            
+            let draggable = document.getElementById(this.toDrag)
             draggable.style.left = (parseFloat(draggable.style.left) +  ev.pageX - this.dragObject.shiftX) + 'px'
             draggable.style.top = (parseFloat(draggable.style.top) + ev.pageY - this.dragObject.shiftY) + 'px'
             this.dragObject = {}
@@ -148,26 +114,48 @@ export default {
 
             this.coords.pageX = ev.pageX 
             this.coords.pageY = ev.pageY
+        },
+
+        handleDblclick(e){
+            let toDelete = e.target.id.match(/.+_/)[0]
+            this.accords = this.accords.filter(acc => acc!==toDelete.slice(0, toDelete.length -1))
 
         }
+
+                // addDraggableAngle(){
+        //     const el = document.getElementById('accord-line')
+        //     const angle = document.createElement('div')
+        //     angle.classList.add('angle')
+        //     el.appendChild(angle)
+
+        //     let elData = el.getBoundingClientRect()
+        //     let angleData = angle.getBoundingClientRect()
+
+        //     angle.style.left = `${Math.round(elData.width + elData.left) - angleData.width}px`
+        //     angle.style.top = `${Math.round(elData.height + elData.top) - angleData.height}px`
+        // },
+
+        // resizeAccordLine(){  
+        //     document.addEventListener('mousedown', (ev)=>{
+        //         if(ev.which == 1 && ev.target.classList.contains('angle')){
+
+        //             document.addEventListener('mousemove', this.handleMouseMove)
+        //         }  
+        //     })
+
+        //     document.addEventListener('mouseup', (ev) => document.removeEventListener('mousemove', this.handleMouseMove))
+        // },
+
+        // handleMouseMove(ev){
+        //     let el = document.querySelector('.angle')
+        //     let div = el.parentElement
+           
+        //     div.style.width = `${(ev.pageX - div.getBoundingClientRect().left)}px`
+        //     el.style.left = `${(ev.pageX - div.getBoundingClientRect().left) + el.getBoundingClientRect().width}px`
+        // },
     },
 
-    mounted(){
-        this.addDraggableAngle()
-        this.resizeAccordLine()
 
-        this.$on('close', val => {
-            this.isTooltip = false
-            this.chosenAccord = val.tone+val.type
-        })
-
-        this.$on('add', val => {
-            this.isTooltip = false
-            this.chosenAccord = val.tone+val.type
-
-            this.addAccord()
-        })
-    }
 }
 </script>
 
