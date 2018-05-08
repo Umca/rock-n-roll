@@ -18,20 +18,14 @@
         #new-accord{
             width: 5vw;
         }
-        .draggable{
-            position: absolute;
-        }
-        .angle{
-            background: black;
-            width: 5px;
-            height: 5px;
-            display: block;
-            position: absolute;
-        }
     </style>
+    
 </head>
 <body>
-    <div id='working-field'>
+    <div id='app'></div>
+    
+    
+    <!-- <div id='working-field'>
         <div id='ctrl-buttons'>
             <button id='download'>download</button>
             <button id='edit'>edit</button>
@@ -51,11 +45,10 @@
                 id='text-line'
             ></textarea>
 
-            <input type='file' id='files' name='song' onchange='handleFiles(event)'>
         </div>
-    </div>
-
-    <script>
+        <input type='file' id='files' name='song' onchange='handleFiles(event)'>
+    </div> -->
+    <!-- <script>
         function handleFiles(ev){
             let files = ev.target.files
             for(let i = 0; i< files.length; i++){
@@ -75,8 +68,6 @@
 
                  reader.readAsBinaryString(f);
 
-                // var blob = file.slice(start, stop + 1);
-                // reader.readAsBinaryString(blob);
             }
             
         }
@@ -134,40 +125,6 @@
             dragObject = {}
 
         }
-
-        function resizeAccordLine(){
-
-        }
-        function addDraggableAngle(){
-            const el = document.getElementById('accord-line')
-            const angle = document.createElement('div')
-            angle.classList.add('angle')
-            el.appendChild(angle)
-            let elData = el.getBoundingClientRect()
-            let angleData = angle.getBoundingClientRect()
-            angle.style.left = `${Math.round(elData.width + elData.left) - angleData.width}px`
-            angle.style.top = `${Math.round(elData.height + elData.top) - angleData.height}px`
-        }
-
-        function handleMouseMove(ev){
-            console.log(ev)
-            let el = document.querySelector('.angle')
-            let div = el.parentElement
-           
-            div.style.width = `${(ev.pageX - div.getBoundingClientRect().left)}px`
-            el.style.left = `${(ev.pageX - div.getBoundingClientRect().left) + el.getBoundingClientRect().width}px`
-        }
-
-        document.addEventListener('mousedown', (ev)=>{
-            if(ev.which == 1 && ev.target.classList.contains('angle')){
-                resizeDiv.downX = ev.pageX
-                resizeDiv.downY = ev.pageY
-
-                document.addEventListener('mousemove', handleMouseMove)
-            }  
-        })
-
-        document.addEventListener('mouseup', (ev) => document.removeEventListener('mousemove', handleMouseMove))
 
         // Check for the various File API support.
         if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -303,6 +260,6 @@
         //     }
         //     return el.closest('.droppable')
         // }
-    </script>
+    </script> -->
 </body>
 </html>

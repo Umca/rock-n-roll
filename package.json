@@ -1,0 +1,27 @@
+{
+  "name": "dev_challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "vue": "^2.5.16"
+  },
+  "devDependencies": {
+    "poi": "^10.1.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "poi index.js",
+    "build": "poi build index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Umca/rock-n-roll.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Umca/rock-n-roll/issues"
+  },
+  "homepage": "https://github.com/Umca/rock-n-roll#readme"
+}
