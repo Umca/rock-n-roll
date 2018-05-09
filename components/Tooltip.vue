@@ -41,13 +41,18 @@ export default {
             this.chosenTone = id
         },
         close(){
+            this.$parent.$emit('close', {tone: '', type: ''})
+            this.clean()
+        },
+
+        clean(){
             this.chosenTone = ''
             this.chosenType = ''
-            this.$parent.$emit('close', {tone: '', type: ''})
         },
 
         add(){
             this.$parent.$emit('add', {tone: this.chosenTone, type: this.chosenType})
+            this.clean()
         }
     },
 }
@@ -69,7 +74,7 @@ export default {
         opacity: 1;
         font-size: 1vw;
         display: flex;
-        top: -145px;
+        top: -78px;
         min-height: 80px;
         min-width: 300px;;
     }
