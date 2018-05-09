@@ -1,15 +1,17 @@
 <template>
     <div id='app-wrapper'>
-        <div id='controls'>
-            <button>Edit</button>
-            <button>New</button>
-            <button>Save</button>
+        <div id='app-control'>
+            <button v-bind:class='{active: mode === "new"}'>Start from scratch</button>
+            <button v-bind:class='{active: mode === "edit"}'>Open to edit</button>
+            <button v-bind:class='{active: mode === "save"}'>Save</button>
         </div>
-        <edit-line></edit-line>
-        <button @click='addLine'> Add new line </button>
+        <div id='app-lines'>
+            <edit-line v-for='line in lines' :key='line.id' :id='line.id'></edit-line>
+        </div>
+            <button @click='addLine'> Add line </button>
     </div>
-  
 </template>
+
 <script>
 import EditLine from './components/EditLine.vue'
 
@@ -20,14 +22,23 @@ export default {
 
     data(){
         return {
-            lines: [],
+            lines: [{ id: Date.now()+Math.random() * 1000 }],
             mode: 'new'
         }
     },
 
+    mounted(){
+        this.$on('delete', val => {
+            this.deleteLine(val)
+        })
+    },
+
     methods: {
         addLine(){
-
+            this.lines.push({ id: Date.now()+Math.random() * 1000 })
+        },
+        deleteLine(val){
+            this.lines = this.lines.filter(line => line.id !== val.id)
         }
     }
 }
@@ -35,12 +46,23 @@ export default {
 <style scoped>
     #app-wrapper{
         width: 40vw;
-        margin: 10vw auto; 
+        margin: 50px auto; 
         min-width: 400px;
     }
 
-    #controls{
-        margin-bottom: 0.5vw;
+    #app-control{
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #app-line-control{
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    #app-line-control button{
+        margin-right: 10px;
     }
 
     .active{
