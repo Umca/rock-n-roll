@@ -1,6 +1,6 @@
 <template>
     <div  v-bind:class="{hidden: !isShown, tooltip: isShown}" >
-        <div class='wrapper'>
+        <div class='options-wrapper'>
             <div id='tones' class='tooltip-box'>
                 <div v-for='tone in tones' :key='tone' @click='chooseTone(tone)'>{{ tone }} </div>
             </div>
@@ -16,7 +16,6 @@
         </div>
         <div class='close' @click.self='close'>x</div>
         <div class='add' @click.self='add'>+</div>
-        
     </div>
 </template>
 <script>
@@ -58,13 +57,10 @@ export default {
 }
 </script>
 <style>
-    .hidden{
-        display: none;
-    }
     .tooltip {
         position: absolute;
         width: 29vw;
-        height:12vh;
+        height:14vh;
         background-color: lightblue;
         color:black;
         text-align: center;
@@ -74,7 +70,7 @@ export default {
         opacity: 1;
         font-size: 1vw;
         display: flex;
-        top: -78px;
+        top: -86px;
         min-height: 80px;
         min-width: 300px;;
     }
@@ -88,12 +84,6 @@ export default {
         border-width: 0.95vw;
         border-style: solid;
         border-color:lightblue transparent transparent transparent;
-    }
-
-    .wrapper{
-        width: 80%;
-        height: 100%;
-        margin: auto;
     }
 
     .tooltip-box{
@@ -117,6 +107,13 @@ export default {
         cursor: pointer;
         transform: scale(1.1)
     }
+
+    .options-wrapper{
+        width: 80%;
+        height: 100%;
+        margin: auto;
+    }
+
     .tooltip-screen-wrapper{
         width: 17%;
         display: flex;
@@ -156,6 +153,10 @@ export default {
         font-weight: bold;
         cursor: pointer;
         font-size: 2vw;
+    }
+
+    .hidden{
+        display: none;
     }
 </style>
 

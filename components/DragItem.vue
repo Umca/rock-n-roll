@@ -1,5 +1,11 @@
 <template>
-  <span draggable='true' class='draggable' v-on:dragstart="handleDrag" :id=id v-on:dblclick='handleDblclick'>{{text}}</span>
+    <span 
+        draggable='true' 
+        class='draggable' 
+        v-on:dragstart="handleDrag" 
+        :id=id 
+        v-on:dblclick='handleDblclick'>{{text}}
+    </span>
 </template>
 <script>
 export default {
