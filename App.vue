@@ -1,8 +1,13 @@
 <template>
     <div id='app-wrapper'>
         <div id='app-control'>
-            <button v-bind:class='{active: mode === "new"}' v-bind:disabled='mode === "new"'>Start from scratch</button>
-            <button v-bind:class='{active: mode === "edit"}'>Open to edit</button>
+            <button v-bind:class='{active: mode === "new"}'             v-bind:disabled='mode === "new"'
+            @click='start'
+            >Start from scratch</button>
+            <button v-bind:class='{active: mode === "edit"}'
+                v-bind:disabled='mode === "edit"'
+                @click='edit'
+            >Open to edit</button>
             <button v-bind:class='{active: mode === "save"}' @click='save'>Save</button>
         </div>
         <div id='app-song'>
@@ -11,7 +16,13 @@
                 @keyup='addSongName'/>
         </div>
         <div id='app-lines'>
-            <edit-line v-for='line in lines' :key='line.id' :id='line.id'></edit-line>
+            <edit-line v-for='line in lines' 
+            :key='line.id' :id='line.id' 
+            :accords = 'line.accords'
+            :lineOfSong = 'line.lineOfSong'
+            :mode = 'mode'
+            
+            ></edit-line>
         </div>
             <button @click='addLine'> Add line </button>
     </div>
@@ -27,15 +38,19 @@ export default {
 
     data(){
         return {
-            lines: [{ id: Date.now()+Math.random() * 1000 }],
+            lines: [],
             mode: 'new',
             songName: ''
         }
     },
 
     mounted(){
-        this.$on('delete', val => {
+        this.$on('deleteLine', val => {
             this.deleteLine(val)
+        })
+
+        this.$on('deleteAccord', val => {
+            this.deleteAccord(val)
         })
     },
 
@@ -44,7 +59,11 @@ export default {
             this.songName = e.target.value
         },
         addLine(){
-            this.lines.push({ id: Date.now()+Math.random() * 1000 })
+            this.lines.push({ 
+                id: Date.now()+Math.random() * 1000,
+                accords: [],
+                lineOfSong: '' 
+            })
         },
         deleteLine(val){
             this.lines = this.lines.filter(line => line.id !== val.id)
@@ -63,7 +82,21 @@ export default {
 
             // to local storage
             localStorage.setItem(result.songName, JSON.stringify(result))
-
+        },
+        edit(){
+            let data = JSON.parse(localStorage.getItem('Сансара'))
+            this.mode = 'edit'
+            this.songName = data.songName
+            this.lines = data.lines
+        },
+        deleteAccord(val){
+            let line = _.findIndex(this.lines, (l) => l.id === val.lineId)
+            this.lines[line].accords = this.lines[line].accords.filter(acc => acc.id !== val.accordId)
+            this.$forceUpdate();
+        },
+        start(){
+            this.lines = []
+            this.songName = ''
         }
     }
 }
