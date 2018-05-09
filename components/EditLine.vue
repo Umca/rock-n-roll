@@ -10,17 +10,15 @@
                 @click = 'showTooltip'
                
             >
-            <drag-item v-for='acc in accords' :key='acc' 
-                :id = 'acc+ "_" +Date.now()'
-                :text=acc
+            <drag-item v-for='acc in accords' :key='acc.accord' 
+                :id = 'acc.id'
+                :text=acc.accord
                 :handleDrag='dragstart'
                 :coords=coords
                 :handleDblclick='handleDblclick'
             >
 
             </drag-item>
-                
-
             </div>
         </div>
         <textarea rows=''
@@ -30,12 +28,14 @@
             id='text-line'
             @keyup="handleTextUpdate"
         ></textarea>
+        <button @click='deleteLine'> Delete line </button>
     </div>
 </div>
 </template>
 <script>
 import Tooltip from './Tooltip'
 import DragItem from './DragItem'
+import _ from 'lodash'
 export default {
     data(){
         return {
@@ -44,11 +44,11 @@ export default {
             lineOfSong: '',
             isTooltip: false,
             coords: {},
-            accords: ['Dm'],
+            accords: [],
             toDrag: undefined
-
         }
     },
+    props: ['id'],
     components: {
         'tooltip': Tooltip,
         'drag-item': DragItem
@@ -68,6 +68,13 @@ export default {
 
             this.addAccord()
         })
+
+        this.$on('item-added', val => {
+            let newlyAdded = this.accords.filter(acc => acc.id == val.id)[0]
+            newlyAdded.coords = val.coords
+
+            
+        })
     },
     methods: {
         handleChange(e){
@@ -75,7 +82,11 @@ export default {
         },
         
         addAccord(){
-            this.accords.push(this.chosenAccord)
+            this.accords.push( {
+                accord: this.chosenAccord,
+                id: this.chosenAccord + "_" + Date.now()
+                
+            })
             this.chosenAccord = ''
         },
 
@@ -95,8 +106,8 @@ export default {
         drop(ev){
             ev.preventDefault();
             let draggable = document.getElementById(this.toDrag)
-            draggable.style.left = (parseFloat(draggable.style.left) +  ev.pageX - this.dragObject.shiftX) + 'px'
-            draggable.style.top = (parseFloat(draggable.style.top) + ev.pageY - this.dragObject.shiftY) + 'px'
+            draggable.style.left = ((parseFloat(draggable.style.left) || 0) +  ev.pageX - this.dragObject.shiftX) + 'px'
+            draggable.style.top = ((parseFloat(draggable.style.top) || 0) + ev.pageY - this.dragObject.shiftY) + 'px'
             this.dragObject = {}
         },
 
@@ -120,6 +131,10 @@ export default {
             let toDelete = e.target.id.match(/.+_/)[0]
             this.accords = this.accords.filter(acc => acc!==toDelete.slice(0, toDelete.length -1))
 
+        },
+
+        deleteLine(){
+            this.$parent.$emit('delete', {id: this.id})
         }
 
                 // addDraggableAngle(){
@@ -162,6 +177,7 @@ export default {
 <style>
     .relative{
         position: relative;
+        margin-bottom: 20px;
     }
     #editline{
         width: 100%
