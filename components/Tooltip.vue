@@ -19,7 +19,8 @@
     </div>
 </template>
 <script>
-import { types, tones } from '../constants'
+import { types, tones } from '../utils/constants'
+import { EventBus } from '../utils/eventBus';
 export default {
     props: ['isShown'],
     data(){
@@ -40,7 +41,7 @@ export default {
             this.chosenTone = id
         },
         close(){
-            this.$parent.$emit('close', {tone: '', type: ''})
+            EventBus.$emit('close', {tone: '', type: ''})
             this.clean()
         },
 
@@ -50,7 +51,7 @@ export default {
         },
 
         add(){
-            this.$parent.$emit('add', {tone: this.chosenTone, type: this.chosenType})
+            EventBus.$emit('add', {tone: this.chosenTone, type: this.chosenType})
             this.clean()
         }
     },

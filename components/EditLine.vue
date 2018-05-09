@@ -34,6 +34,7 @@
 <script>
 import Tooltip from './Tooltip'
 import DragItem from './DragItem'
+import { EventBus } from '../utils/eventBus'
 import _ from 'lodash'
 export default {
     data(){
@@ -51,19 +52,19 @@ export default {
         'drag-item': DragItem
     },
     mounted(){
-        this.$on('close', val => {
+        EventBus.$on('close', val => {
             this.isTooltip = false
             this.chosenAccord = ''
         })
 
-        this.$on('add', val => {
+        EventBus.$on('add', val => {
             this.isTooltip = false
             this.chosenAccord = val.tone+val.type
 
             this.addAccord()
         })
 
-        this.$on('item-added', val => {
+        EventBus.$on('item-added', val => {
             let newlyAdded = this.searchAccord(val.id)
             newlyAdded.coords = val.coords
         })
@@ -119,7 +120,7 @@ export default {
         },
 
         handleTextUpdate(ev){
-            this.lineOfSong = ev.target.value
+            EventBus.$emit('new_line', {text: ev.target.value, lineId: this.id})
         },
 
         showTooltip(ev){
@@ -132,11 +133,11 @@ export default {
 
         handleDblclick(e){
             // this.accords = this.accords.filter(acc => acc.id !== e.target.id)
-            this.$parent.$emit('deleteAccord', {lineId: this.id, accordId: e.target.id})
+            EventBus.$emit('deleteAccord', {lineId: this.id, accordId: e.target.id})
         },
 
         deleteLine(){
-            this.$parent.$emit('deleteLine', {id: this.id})
+            EventBus.$emit('deleteLine', {id: this.id})
         }
     },
 }
