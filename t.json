@@ -1,0 +1,22 @@
+﻿{
+	"songName": "Insane",
+	"lines": [{
+		"id": 1525892432351.1792,
+		"lineOfSong": "",
+		"accords": [{
+			"accord": "F#m",
+			"id": "F#m_1525892440630",
+			"coords": {
+				"left": "6.0234px",
+				"top": "22.5px"
+			}
+		}, {
+			"accord": "G#",
+			"id": "G#_1525892462889",
+			"coords": {
+				"left": "107.75px",
+				"top": "22.5px"
+			}
+		}]
+	}]
+}
