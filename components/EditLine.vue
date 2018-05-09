@@ -12,7 +12,9 @@
                     :id = 'acc.id'
                     :text=acc.accord
                     :handleDrag='dragstart'
-                    :coords=coords
+                    :clickCoords= 'Object.keys(coords).length > 0 ?
+                    coords : acc.coords'
+                    :mode = 'mode'
                     :handleDblclick='handleDblclick'>
                 </drag-item>
             </div>
@@ -23,6 +25,7 @@
             placeholder="Add line of song..."
             id='text-line'
             @keyup="handleTextUpdate"
+            :value='lineOfSong'
         ></textarea>
         <button @click='deleteLine'> Delete line </button>
     </div>
@@ -38,13 +41,11 @@ export default {
             chosenAccord: '',
             dragObject: {},
             toDrag: undefined,
-            lineOfSong: '',
             isTooltip: false,
             coords: {},
-            accords: [],
         }
     },
-    props: ['id'],
+    props: ['id', 'accords', 'lineOfSong','mode'],
     components: {
         'tooltip': Tooltip,
         'drag-item': DragItem
@@ -63,7 +64,6 @@ export default {
         })
 
         this.$on('item-added', val => {
-            // let newlyAdded = this.accords.filter(acc => acc.id == val.id)[0]
             let newlyAdded = this.searchAccord(val.id)
             newlyAdded.coords = val.coords
         })
@@ -131,11 +131,12 @@ export default {
         },
 
         handleDblclick(e){
-            this.accords = this.accords.filter(acc => acc.id !== e.target.id)
+            // this.accords = this.accords.filter(acc => acc.id !== e.target.id)
+            this.$parent.$emit('deleteAccord', {lineId: this.id, accordId: e.target.id})
         },
 
         deleteLine(){
-            this.$parent.$emit('delete', {id: this.id})
+            this.$parent.$emit('deleteLine', {id: this.id})
         }
     },
 }
