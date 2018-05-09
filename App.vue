@@ -10,6 +10,13 @@
             >Open to edit</button>
             <button v-bind:class='{active: mode === "save"}' @click='save'>Save</button>
         </div>
+        <div id='app-download' v-bind:class='{hidden: mode !== "edit"}'>
+            <button @click="download">File to download</button>
+            <input type='file' 
+                id="getFile" 
+                class='hidden'
+                @change='readFile'>
+        </div>
         <div id='app-song'>
             <input type=text placeholder='Name of the song'
                 :value='songName'
@@ -30,6 +37,8 @@
 
 <script>
 import EditLine from './components/EditLine.vue'
+import { MyFileReader } from './utils/FileReader'
+import { EventBus } from './utils/eventBus'
 
 export default {
     components: {
@@ -40,17 +49,31 @@ export default {
         return {
             lines: [],
             mode: 'new',
-            songName: ''
+            songName: '',
+            file: ''
         }
     },
 
     mounted(){
-        this.$on('deleteLine', val => {
+        this.fileReader = new MyFileReader(this.failToReadFile)
+
+        EventBus.$on('deleteLine', val => {
             this.deleteLine(val)
         })
 
-        this.$on('deleteAccord', val => {
+        EventBus.$on('deleteAccord', val => {
             this.deleteAccord(val)
+        })
+
+        EventBus.$on('new_line', (val) => {
+            this.updateLine(val)
+        })
+
+        EventBus.$on('file', (val) => {
+            console.log(val)
+            // let obj = JSON.parse(val.slice(1, -1))
+            // this.songName = obj.songName
+            // this.lines = obj.lines
         })
     },
 
@@ -68,6 +91,10 @@ export default {
         deleteLine(val){
             this.lines = this.lines.filter(line => line.id !== val.id)
         },
+        updateLine(val){
+            let line = _.findIndex(this.lines, (l) => l.id === val.lineId)
+            this.lines[line].lineOfSong= val.text
+        },
         save(){
             let result = {}
             result.songName = this.songName
@@ -84,10 +111,13 @@ export default {
             localStorage.setItem(result.songName, JSON.stringify(result))
         },
         edit(){
-            let data = JSON.parse(localStorage.getItem('Сансара'))
+            // For data saved to localStorage
+            // let data = JSON.parse(localStorage.getItem('Сансара'))
+            
             this.mode = 'edit'
-            this.songName = data.songName
-            this.lines = data.lines
+            // this.songName = data.songName
+            // this.lines = data.lines
+
         },
         deleteAccord(val){
             let line = _.findIndex(this.lines, (l) => l.id === val.lineId)
@@ -97,6 +127,17 @@ export default {
         start(){
             this.lines = []
             this.songName = ''
+            this.mode = 'new' 
+        },
+        download(){
+            let input = document.getElementById('getFile')
+            input.click()
+        },
+        failToReadFile(){
+            console.log('This API is not available at your browser')
+        },
+        readFile(e){
+             this.fileReader.handleFile(e)
         }
     }
 }
@@ -112,6 +153,11 @@ export default {
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
+    }
+
+    #app-download{
+         margin-bottom: 20px;
+         width: 100%;
     }
 
     #app-song{
@@ -133,6 +179,10 @@ export default {
 
     .active{
         background:indianred;
+    }
+
+    .hidden{
+        display: none;
     }
 
 </style>
