@@ -25,21 +25,30 @@ class MyFileReader{
             }
 
             this.reader = new FileReader()
+            this.binary = ''
 
             this.reader.onload = function (evt) {
-                debugger
                 if (evt.target.readyState == FileReader.DONE) {
-                    console.log(evt.target.result)
                     EventBus.$emit('file', evt.target.result)
+                    // console.log(evt.target.result)
+                    // var bytes = new Uint8Array(evt.target.result);
+                    // var length = bytes.byteLength;
+                    // for (var i = 0; i < length; i++) {
+                    //     this.binary += String.fromCharCode(bytes[i]);
+                    // }
+                    // console.log(this.binary.indexOf('{'))
+                    // let a = '"' + this.binary.slice(this.binary.indexOf('{')) + '"'.replace(/ /g, '')
+                    // console.log(a)
                 }
             };
+            
 
             this.reader.onerror = function (evt) { 
                 console.log(evt)
             }
 
             // this.reader.readAsArrayBuffer(f);
-            this.reader.readAsBinaryString(f);
+            this.reader.readAsText(f);
 
         }
     }
