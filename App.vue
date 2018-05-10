@@ -1,14 +1,14 @@
 <template>
     <div id='app-wrapper'>
         <div id='app-control'>
-            <button v-bind:class='{active: mode === "new"}'             v-bind:disabled='mode === "new"'
+            <button class='purple btn'             v-bind:disabled='mode === "new"'
             @click='start'
             >Start from scratch</button>
-            <button v-bind:class='{active: mode === "edit"}'
+            <button class='purple btn'
                 v-bind:disabled='mode === "edit"'
                 @click='edit'
             >Open to edit</button>
-            <button v-bind:class='{active: mode === "save"}' @click='save'>
+            <button class='purple btn' @click='save'>
                 Save
             </button>
             <a href="" id="app-download" 
@@ -37,7 +37,7 @@
             
             ></edit-line>
         </div>
-            <button @click='addLine'> Add line </button>
+            <button @click='addLine' class='btn green'> Add line </button>
     </div>
 </template>
 
@@ -163,7 +163,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style >
     #app-wrapper{
         width: 40vw;
         margin: 50px auto; 
@@ -183,10 +183,16 @@ export default {
 
     #app-song{
         margin-bottom: 20px;
+        
     }
 
     #app-song input{
         width: 100%;
+        border: 1px solid #55acee;
+        border-radius: 5px;
+        height: 34px;
+        padding: 0.5vw;
+        font-family: 'Kalam', cursive;
     }
 
     #app-line-control{
@@ -204,6 +210,53 @@ export default {
 
     .hidden{
         display: none;
+    }
+
+    /* button{
+        background-image:  url("./images/button.png");
+        background-repeat: no-repeat;
+        background-position: top;
+        width: 117px;
+        height: 39px;
+        border: 0;
+        font-family: 'Gloria Hallelujah', cursive;
+        border-radius: 5px;
+    } */
+
+    .btn {
+        border-radius: 5px;
+        padding: 10px 17px;
+        font-size: 16px;
+        text-decoration: none;
+        color: #fff;
+        position: relative;
+        display: inline-block;
+        border: transparent;
+        font-family: 'Gloria Hallelujah', cursive;
+    }
+
+    .btn:active {
+        transform: translate(0px, 5px);
+        -webkit-transform: translate(0px, 5px);
+        box-shadow: 0px 1px 0px 0px;
+    }
+
+    .green {
+        background-color: #2ecc71;
+        box-shadow: 0px 5px 0px 0px #15B358;
+    }
+
+    .green:hover {
+        background-color: #48E68B   ;
+    }
+
+    .purple {
+        background-color: #9b59b6;
+        box-shadow: 0px 5px 0px 0px #82409D;
+    }
+
+    .purple:hover {
+        background-color: #B573D0;
     }
 
 </style>

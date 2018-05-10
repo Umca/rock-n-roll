@@ -27,7 +27,7 @@
             @keyup="handleTextUpdate"
             :value='lineOfSong'
         ></textarea>
-        <button @click='deleteLine'> Delete line </button>
+        <button @click='deleteLine' class='btn orange'> Delete line </button>
     </div>
 </div>
 </template>
@@ -153,13 +153,11 @@ export default {
         width: 100%;
     }
     #accord-line{
-        height: 2vw;
-        /* border: 1px solid blue; */
+        height: 3vw;
+        border: 1px solid #f1c40f;
         min-height: 40px;
-        background-image: url('../images/2.png');
-        background-repeat: no-repeat;
-        background-position: top;
-        background-size: cover;
+        border-radius: 5px;
+        margin-bottom: 1vw;
     }
     #new-accord{
         width: 5vw;
@@ -168,20 +166,30 @@ export default {
     #text-line{
         resize: none;
         min-height: 40px;
-        border: none;
-        background-image: url('../images/2.png');
-        background-repeat: no-repeat;
-        background-position: top;
-        background-size: contain;
+        border-color: #f1c40f;
+        border-radius: 5px;
+        box-sizing: border-box;
+        padding: 0.5vw;
+        margin-bottom: 1vw; 
     }
     .draggable{
         position: absolute;
     }
 
+    .orange {
+        background-color: #e67e22;
+        box-shadow: 0px 5px 0px 0px #CD6509;
+        }
+
+        .orange:hover {
+        background-color: #FF983C;
+        }
+
     textarea {
         width: 99.1%;
-        margin-top: 0.5vw;
         height: 2vw;
+        line-height: 2vw;
+        font-family: 'Kalam', cursive;
 
     }
 
