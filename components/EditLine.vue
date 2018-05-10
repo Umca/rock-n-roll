@@ -54,20 +54,21 @@ export default {
     mounted(){
         EventBus.$on('close', val => {
             this.isTooltip = false
-            this.chosenAccord = ''
+            // this.chosenAccord = ''
         })
 
-        EventBus.$on('add', val => {
+        this.$on('add', val => {
+
             this.isTooltip = false
-            this.chosenAccord = val.tone+val.type
-
-            this.addAccord()
+            EventBus.$emit('accord-added', { lineId: this.id, accord: val.tone+val.type })
         })
 
-        EventBus.$on('item-added', val => {
+        this.$on('item-added', val => {
             let newlyAdded = this.searchAccord(val.id)
             newlyAdded.coords = val.coords
         })
+
+        console.log(document.getElementById('accord-line').style.backgroundImage)
     },
     methods: {
 
@@ -89,6 +90,7 @@ export default {
         },
 
         dragstart(ev) {
+            ev.dataTransfer.setData('Text', ev.target.id);
             this.toDrag = ev.target.id
             this.dragObject.downX = ev.pageX
             this.dragObject.downY = ev.pageY
@@ -99,7 +101,7 @@ export default {
 
         drop(ev){
             ev.preventDefault();
-            let draggable = document.getElementById(this.toDrag)
+            let draggable = document.getElementById(this.toDrag)     
             draggable.style.left = ((parseFloat(draggable.style.left) || 0) +  ev.pageX - this.dragObject.shiftX) + 'px'
             draggable.style.top = ((parseFloat(draggable.style.top) || 0) + ev.pageY - this.dragObject.shiftY) + 'px'
 
@@ -132,7 +134,6 @@ export default {
         },
 
         handleDblclick(e){
-            // this.accords = this.accords.filter(acc => acc.id !== e.target.id)
             EventBus.$emit('deleteAccord', {lineId: this.id, accordId: e.target.id})
         },
 
@@ -149,12 +150,16 @@ export default {
         margin-bottom: 20px;
     }
     #editline{
-        width: 100%
+        width: 100%;
     }
     #accord-line{
         height: 2vw;
-        border: 1px solid blue;
+        /* border: 1px solid blue; */
         min-height: 40px;
+        background-image: url('../images/2.png');
+        background-repeat: no-repeat;
+        background-position: top;
+        background-size: cover;
     }
     #new-accord{
         width: 5vw;
@@ -163,6 +168,11 @@ export default {
     #text-line{
         resize: none;
         min-height: 40px;
+        border: none;
+        background-image: url('../images/2.png');
+        background-repeat: no-repeat;
+        background-position: top;
+        background-size: contain;
     }
     .draggable{
         position: absolute;

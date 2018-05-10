@@ -51,7 +51,7 @@ export default {
         },
 
         add(){
-            EventBus.$emit('add', {tone: this.chosenTone, type: this.chosenType})
+            this.$parent.$emit('add', {tone: this.chosenTone, type: this.chosenType})
             this.clean()
         }
     },
