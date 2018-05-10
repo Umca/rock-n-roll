@@ -8,7 +8,13 @@
                 v-bind:disabled='mode === "edit"'
                 @click='edit'
             >Open to edit</button>
-            <button v-bind:class='{active: mode === "save"}' @click='save'>Save</button>
+            <button v-bind:class='{active: mode === "save"}' @click='save'>
+                Save
+            </button>
+            <a href="" id="app-download" 
+                v-bind:class ='{hidden: !toSave}'
+                @click='cleanToSave'
+            >click to download your file</a>
         </div>
         <div id='app-download' v-bind:class='{hidden: mode !== "edit"}'>
             <button @click="download">File to download</button>
@@ -50,7 +56,8 @@ export default {
             lines: [],
             mode: 'new',
             songName: '',
-            file: ''
+            file: '',
+            toSave: false
         }
     },
 
@@ -62,6 +69,7 @@ export default {
         })
 
         EventBus.$on('deleteAccord', val => {
+            console.log(val)
             this.deleteAccord(val)
         })
 
@@ -69,11 +77,16 @@ export default {
             this.updateLine(val)
         })
 
+        EventBus.$on('accord-added', (val) => {
+            console.log(val)
+            this.addAccordToLine(val)
+        })
+
         EventBus.$on('file', (val) => {
             console.log(val)
-            // let obj = JSON.parse(val.slice(1, -1))
-            // this.songName = obj.songName
-            // this.lines = obj.lines
+            let obj = JSON.parse(val)
+            this.songName = obj.songName
+            this.lines = obj.lines
         })
     },
 
@@ -95,6 +108,10 @@ export default {
             let line = _.findIndex(this.lines, (l) => l.id === val.lineId)
             this.lines[line].lineOfSong= val.text
         },
+        addAccordToLine(val){
+            let line = _.findIndex(this.lines, (l) => l.id === val.lineId)
+            this.lines[line].accords.push({accord: val.accord, coords: {}, id: Math.random() * 1000})
+        },
         save(){
             let result = {}
             result.songName = this.songName
@@ -107,21 +124,25 @@ export default {
                 })
             })
 
-            // to local storage
-            localStorage.setItem(result.songName, JSON.stringify(result))
+            this.toSave = true
+            
+
+            let a = document.getElementById("app-download")
+            let file = new Blob([JSON.stringify(result)], {type: 'application/json'})
+            a.href = URL.createObjectURL(file)
+            a.download = `${this.songName}.json`
+        },
+
+        cleanToSave(){
+            this.toSave = false
         },
         edit(){
-            // For data saved to localStorage
-            // let data = JSON.parse(localStorage.getItem('Сансара'))
-            
             this.mode = 'edit'
-            // this.songName = data.songName
-            // this.lines = data.lines
-
         },
         deleteAccord(val){
             let line = _.findIndex(this.lines, (l) => l.id === val.lineId)
-            this.lines[line].accords = this.lines[line].accords.filter(acc => acc.id !== val.accordId)
+            this.lines[line].accords = this.lines[line].accords.filter(acc => acc.id != val.accordId)
+            console.log(this.lines[line].accords)
             this.$forceUpdate();
         },
         start(){
