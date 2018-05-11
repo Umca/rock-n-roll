@@ -114,19 +114,20 @@ export default {
 
         drop(ev){
             ev.preventDefault();
-            let draggable = document.getElementById(this.toDrag)     
-            draggable.style.left = ((parseFloat(draggable.style.left) || 0) +  ev.pageX - this.dragObject.shiftX) + 'px'
-            draggable.style.top = ((parseFloat(draggable.style.top) || 0) + ev.pageY - this.dragObject.shiftY) + 'px'
+            if(this.toDrag){
+                let draggable = document.getElementById(this.toDrag)     
+                draggable.style.left = ((parseFloat(draggable.style.left) || 0) +  ev.pageX - this.dragObject.shiftX) + 'px'
+                draggable.style.top = ((parseFloat(draggable.style.top) || 0) + ev.pageY - this.dragObject.shiftY) + 'px'
 
-            let dropped = this.searchAccord(draggable.id)
-            dropped.coords = {
-                left: draggable.style.left,
-                top: draggable.style.top
+                let dropped = this.searchAccord(draggable.id)
+                dropped.coords = {
+                    left: draggable.style.left,
+                    top: draggable.style.top
+                }
+
+                this.dragObject = {}
             }
-
-            console.log(dropped, this.accords)
-
-            this.dragObject = {}
+            
 
         },
 
