@@ -79,14 +79,20 @@ export default {
         })
 
         EventBus.$on('file', (val) => {
-            console.log(val)
             let obj = JSON.parse(val)
             this.songName = obj.songName
             this.lines = obj.lines
         })
+
+        this.$on('tooltip_opened', (val) => {
+            this.closeOtherTultips(val)
+        })
     },
 
     methods: {
+        closeOtherTultips(val){
+            this.$children.filter(line => line.id !== val.lineId).forEach( l => l.isTooltip = false)
+        },
         addSongName(e){
             this.songName = e.target.value
         },
@@ -164,6 +170,10 @@ export default {
         },
         readFile(e){
              this.fileReader.handleFile(e)
+        },
+        findLine(id){
+            let line = _.findIndex(this.lines, (l) => l.id === val.id)
+            return this.lines[line]
         }
     }
 }
