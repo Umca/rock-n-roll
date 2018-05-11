@@ -1,5 +1,5 @@
 <template>
-<div class='relative'>
+<div class = 'relative'>
     <tooltip :isShown=isTooltip></tooltip>
     <div id='editline'>
         <div class='wrapper'>
@@ -65,13 +65,13 @@ export default {
         'drag-item': DragItem
     },
     mounted(){
-        this.$on('close', val => {
+        this.$on('close-tooltip', val => {
             this.isTooltip = false
             if(this.accords.length > 0) return
             this.togglePlaceholder('show')
         })
 
-        this.$on('add', val => {
+        this.$on('add-from-tooltip', val => {
             this.isTooltip = false
             EventBus.$emit('accord-added', { lineId: this.id, accord: val.tone+val.type })
         })

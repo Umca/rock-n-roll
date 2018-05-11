@@ -1,38 +1,41 @@
 <template>
-    <div  v-bind:class="{hidden: !isShown, tooltip: isShown}" >
-        <div class ='tooltip-screen-wrapper'>
+    <div  v-bind:class = '{ hidden: !isShown, tooltip: isShown }' >
+        <div class = 'tooltip-screen-wrapper'>
             <div class = 'tooltip-screen'>
-                <input class='chosenItem' :value='chosenTone' type='text'
-                    @keyup="chooseItem('Tone', $event)"
+                <input  type = 'text'
+                        class = 'chosenItem' 
+                        :value = 'chosenTone' 
+                        @keyup = 'chooseItem("Tone", $event)'
                 />
-                <input type='text' class='chosenItem' :value='chosenType'
-                    @keyup="chooseItem('Type', $event)"
+                <input  type = 'text' 
+                        class = 'chosenItem'
+                        :value = 'chosenType'
+                        @keyup = 'chooseItem("Type", $event)'
                 />
             </div>
-            <div class='add btn green' @click.self='add'>+</div>
+            <div class = 'btn green add' @click.self = 'add'>+</div>
         </div>
-        <div class='options-wrapper'>
-            <div id='tones' class='tooltip-box'>
-                <div v-for='tone in tones' :key='tone' @click='chooseTone(tone)'>{{ tone }} </div>
+        <div class = 'options-wrapper'>
+            <div id = 'tones' class = 'tooltip-box'>
+                <div v-for = 'tone in tones' :key = 'tone' @click = 'chooseTone(tone)'>{{ tone }}</div>
             </div>
-            <div id='types' class='tooltip-box'>
-                <div v-for='type in types' :key='type' @click='chooseType(type)'>{{ type }} </div>
+            <div id = 'types' class = 'tooltip-box'>
+                <div v-for = 'type in types' :key = 'type' @click = 'chooseType(type)'>{{ type }}</div>
             </div>
         </div>
-        <div class='close' @click.self='close'>x</div>
+        <div class = 'close' @click.self = 'close'>x</div>
     </div>
 </template>
 <script>
 import { types, tones } from '../utils/constants'
-import { EventBus } from '../utils/eventBus';
 export default {
     props: ['isShown'],
     data(){
         return {
             types,
             tones,
-            chosenTone:'',
-            chosenType:'',
+            chosenTone: '',
+            chosenType: '',
         }
     },
 
@@ -40,32 +43,30 @@ export default {
         chooseType(id){
             this.chosenType = id
         },
-
         chooseTone(id){
             this.chosenTone = id
         },
         chooseItem(mode, e){
             this[`chosen${mode}`] = e.target.value
         },
-        close(){
-            this.$parent.$emit('close', {tone: '', type: ''})
+        add(){
+            this.$parent.$emit('add-from-tooltip', {tone: this.chosenTone, type: this.chosenType})
             this.clean()
         },
-
+        close(){
+            this.$parent.$emit('close-tooltip', {tone: '', type: ''})
+            this.clean()
+        },
         clean(){
             this.chosenTone = ''
             this.chosenType = ''
         },
-
-        add(){
-            this.$parent.$emit('add', {tone: this.chosenTone, type: this.chosenType})
-            this.clean()
-        }
     },
 }
 </script>
 <style>
     .tooltip {
+        display: flex;
         position: absolute;
         width: 29vw;
         background-color: rgba(201, 232, 255, 0.9);
@@ -76,7 +77,6 @@ export default {
         z-index: 99999;
         opacity: 1;
         font-size: 1vw;
-        display: flex;
         top: -79px;
         left: 209px;
         min-height: 80px;
@@ -112,7 +112,7 @@ export default {
         margin-left: 0.5vw;
         font-size: 10px;
         font-weight: 400;
-        font-family: 'Kalam', cursive;
+        font-family: 'Kalam', cursive, 'Arial', sans-serif;
     }
 
     .tooltip-box div:hover{
@@ -142,11 +142,12 @@ export default {
     .chosenItem{
         box-sizing: border-box;
         flex-grow: 1;
-        font-family: 'Kalam', cursive;
+        font-family: 'Kalam', cursive, 'Arial', sans-serif;
         font-size: 10px;
         width: 100%;
         border: transparent;
     }
+
     .chosenItem:first-child{
         border-radius: 3px 0 0 3px;
     }
@@ -158,7 +159,7 @@ export default {
     .close{
         background: white;
         color: black;
-        font-family: 'Kalam', cursive;
+        font-family: 'Kalam', cursive, 'Arial', sans-serif;
         border: 1px solid rgba(201, 232, 255, 0.9);
         line-height: 20px;
         position: absolute;
@@ -175,6 +176,14 @@ export default {
         cursor: pointer;
         transition: 0.3s;
     }
+
+    .add{
+        padding: 3px 7px;
+        height: 10%;
+        line-height: 7px;
+        font-size: 20px;
+        margin-top: 10%;
+    }
     
     .close:hover {
         background-color: rgba(201, 232, 255, 0.9);
@@ -184,14 +193,7 @@ export default {
     .hidden{
         display: none;
     }
-
-    .add{
-        padding: 3px 7px;
-        height: 10%;
-        line-height: 7px;
-        font-size: 20px;
-        margin-top: 10%;
-    }
+    
 </style>
 
 
