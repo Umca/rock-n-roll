@@ -1,30 +1,26 @@
 <template>
     <div id='app-wrapper'>
         <div id='app-control'>
-            <button class='purple btn'             v-bind:disabled='mode === "new"'
+            <button class='purple btn'
+            v-bind:disabled='mode === "new"'
             @click='start'
             >Start from scratch</button>
-            <button class='purple btn'
-                v-bind:disabled='mode === "edit"'
-                @click='edit'
-            >Open to edit</button>
-            <button class='purple btn' @click='save'>
-                Save
-            </button>
-            <a href="" id="app-download" 
-                v-bind:class ='{hidden: !toSave}'
-                @click='cleanToSave'
-            >click to download your file</a>
+            <div id='app-download'>
+                <button 
+                    type='button'
+                    class='btn purple'
+                    @click='edit'
+                >Open o edit</button>
+                <input type='file' 
+                    id="getFile" 
+                    class='hidden'
+                    @change='readFile'>
+            </div>
+            <button class='purple btn' @click='save'>Save</button>
         </div>
-        <div id='app-download' v-bind:class='{hidden: mode !== "edit"}'>
-            <button @click="download">File to download</button>
-            <input type='file' 
-                id="getFile" 
-                class='hidden'
-                @change='readFile'>
-        </div>
+        
         <div id='app-song'>
-            <input type=text placeholder='Name of the song'
+            <input type=text placeholder='Name of the song...'
                 :value='songName'
                 @keyup='addSongName'/>
         </div>
@@ -123,14 +119,22 @@ export default {
                     accords: ch.accords
                 })
             })
-
-            this.toSave = true
             
-
-            let a = document.getElementById("app-download")
             let file = new Blob([JSON.stringify(result)], {type: 'application/json'})
-            a.href = URL.createObjectURL(file)
-            a.download = `${this.songName}.json`
+            if (window.navigator.msSaveOrOpenBlob) 
+                window.navigator.msSaveOrOpenBlob(file, filename);
+            else {
+                var a = document.createElement("a"),
+                    url = URL.createObjectURL(file);
+                a.href = url;
+                a.download = `${this.songName || 'mySuperSong'}.json`;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(function() {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);  
+                }, 0); 
+            }
         },
 
         cleanToSave(){
@@ -138,6 +142,7 @@ export default {
         },
         edit(){
             this.mode = 'edit'
+            this.download()
         },
         deleteAccord(val){
             let line = _.findIndex(this.lines, (l) => l.id === val.lineId)
@@ -176,23 +181,19 @@ export default {
         justify-content: space-between;
     }
 
-    #app-download{
-         margin-bottom: 20px;
-         width: 100%;
-    }
-
     #app-song{
         margin-bottom: 20px;
-        
     }
 
     #app-song input{
         width: 100%;
-        border: 1px solid #55acee;
+        border: 1px solid #7dbcec;
         border-radius: 5px;
-        height: 34px;
-        padding: 0.5vw;
+        height: 27px;
+        padding:  3px 9px;
         font-family: 'Kalam', cursive;
+        box-sizing: border-box;
+        background-color: rgba(201, 232, 255, 0.7);
     }
 
     #app-line-control{
@@ -204,35 +205,21 @@ export default {
         margin-right: 10px;
     }
 
-    .active{
-        background:indianred;
-    }
-
     .hidden{
         display: none;
     }
 
-    /* button{
-        background-image:  url("./images/button.png");
-        background-repeat: no-repeat;
-        background-position: top;
-        width: 117px;
-        height: 39px;
-        border: 0;
-        font-family: 'Gloria Hallelujah', cursive;
-        border-radius: 5px;
-    } */
-
     .btn {
         border-radius: 5px;
-        padding: 10px 17px;
-        font-size: 16px;
+        padding: 4px 12px;
+        font-size: 14px;
         text-decoration: none;
         color: #fff;
         position: relative;
-        display: inline-block;
+        display: block;
         border: transparent;
         font-family: 'Gloria Hallelujah', cursive;
+        cursor: pointer;
     }
 
     .btn:active {
@@ -257,6 +244,19 @@ export default {
 
     .purple:hover {
         background-color: #B573D0;
+    }
+
+    ::-webkit-input-placeholder {
+    color: #d5dadd;
+    }
+    ::-moz-placeholder {
+    color: #d5dadd;
+    }
+    :-ms-input-placeholder { 
+    color: #d5dadd;
+    }
+    :-moz-placeholder { 
+    color: #d5dadd;
     }
 
 </style>
