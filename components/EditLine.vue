@@ -80,8 +80,6 @@ export default {
             let newlyAdded = this.searchAccord(val.id)
             newlyAdded.coords = val.coords
         })
-
-        console.log(document.getElementById('accord-line').style.backgroundImage)
     },
     methods: {
 
@@ -127,8 +125,6 @@ export default {
 
                 this.dragObject = {}
             }
-            
-
         },
 
         allowDrop(ev){
@@ -141,7 +137,9 @@ export default {
 
         showTooltip(ev){
             if(ev.target.classList.contains('draggable')) return
+
             this.isTooltip = true
+            this.$parent.$emit('tooltip_opened', { lineId: this.id })
 
             this.togglePlaceholder('hide')
 
@@ -168,21 +166,42 @@ export default {
     },
 }
 </script>
-
 <style>
+    .placeholder {
+        position: absolute;
+    }
     .relative{
         position: relative;
         margin-bottom: 20px;
     }
+    .hidden{
+        display: none;
+    }
     #editline{
         width: 100%;
+        display: flex;
     }
     #accord-line{
-        height: 3vw;
         border: 1px solid #f1c40f;
-        min-height: 40px;
-        border-radius: 5px;
-        margin-bottom: 1vw;
+        border-bottom: transparent;
+        height: 20px;
+        border-radius: 5px 5px  0 0;
+        width: 100%;
+        background-color: rgba(254, 239, 176, 0.5);
+        padding:  3px 7px;
+        font-family: 'Kalam', cursive;
+        font-size: 12px;
+    }
+
+    #accord-line p{
+        margin: 0;
+        line-height: 20px;
+        color: #d5dadd;
+        user-select: none;
+    }
+
+    #accord-field{
+        display: flex;
     }
     #new-accord{
         width: 5vw;
@@ -190,38 +209,39 @@ export default {
 
     #text-line{
         resize: none;
-        min-height: 40px;
-        border-color: #f1c40f;
-        border-radius: 5px;
+        border: 1px solid #f1c40f;
+        border-radius: 0 0 5px 5px;
         box-sizing: border-box;
-        padding: 0.5vw;
-        margin-bottom: 1vw; 
-    }
-    .draggable{
-        position: absolute;
-    }
-
-    .orange {
-        background-color: #e67e22;
-        box-shadow: 0px 5px 0px 0px #CD6509;
-        }
-
-        .orange:hover {
-        background-color: #FF983C;
-        }
-
-    textarea {
-        width: 99.1%;
-        height: 2vw;
-        line-height: 2vw;
+        padding: 2px 9px;
+        width: 100%;
         font-family: 'Kalam', cursive;
-
+        font-size: 10px;
+    }
+    .orange {
+        color: #e67e22;
+        background: transparent;
+        border: transparent;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
     }
 
-    #accord-line:hover .prompt{
-        visibility: visible;
-        opacity: 1;
+    .orange:hover {
+        color: #FF983C;
     }
+
+    .wrapper{
+        display: flex;
+        width: 95%;
+        margin-right: 2%;
+        flex-direction: column;
+    }
+    .btn-wrapper{
+        position: relative;
+    }
+
+    
 
 </style>
 
