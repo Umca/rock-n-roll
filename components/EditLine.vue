@@ -2,32 +2,37 @@
 <div class='relative'>
     <tooltip :isShown=isTooltip></tooltip>
     <div id='editline'>
-        <div    id='accord-field' 
-                @drop='drop' 
-                @dragover='allowDrop'>
-            <div id ='accord-line' 
-                class ='droppable'
-                @click = 'showTooltip'>
-                <drag-item v-for='acc in accords' :key='acc.accord' 
-                    :id = 'acc.id'
-                    :text=acc.accord
-                    :handleDrag='dragstart'
-                    :clickCoords= 'Object.keys(coords).length > 0 ?
-                    coords : acc.coords'
-                    :mode = 'mode'
-                    :handleDblclick='handleDblclick'>
-                </drag-item>
+        <div class='wrapper'>
+            <div    id='accord-field' 
+                    @drop='drop' 
+                    @dragover='allowDrop'>
+                <div id ='accord-line' 
+                    class ='droppable editable'
+                    @click = 'showTooltip'>
+                    <p v-bind:class="placeholderClass" >Click to add accords...</p>
+                    <drag-item v-for='acc in accords' :key='acc.id' 
+                        :id = 'acc.id'
+                        :text=acc.accord
+                        :handleDrag='dragstart'
+                        :clickCoords= 'Object.keys(coords).length > 0 ?
+                        coords : acc.coords'
+                        :mode = 'mode'
+                        :handleDblclick='handleDblclick'>
+                    </drag-item>
+                </div>
             </div>
+            <input 
+                type='text' 
+                name='text-line'
+                placeholder="Add line of song..."
+                id='text-line'
+                @keyup="handleTextUpdate"
+                :value='lineOfSong'
+            />
+            </div>
+        <div class='btn-wrapper'>
+            <button @click='deleteLine' class='orange' type='button'> X </button>
         </div>
-        <textarea rows=''
-            cols=''  
-            name='text-line'
-            placeholder="Add line of song..."
-            id='text-line'
-            @keyup="handleTextUpdate"
-            :value='lineOfSong'
-        ></textarea>
-        <button @click='deleteLine' class='btn orange'> Delete line </button>
     </div>
 </div>
 </template>
