@@ -51,19 +51,27 @@ export default {
             coords: {},
         }
     },
+    computed: {
+        placeholderClass(){
+            return {
+                hidden: this.accords.length > 0,
+                'placeholder': true
+            }
+        }
+    },
     props: ['id', 'accords', 'lineOfSong','mode'],
     components: {
         'tooltip': Tooltip,
         'drag-item': DragItem
     },
     mounted(){
-        EventBus.$on('close', val => {
+        this.$on('close', val => {
             this.isTooltip = false
-            // this.chosenAccord = ''
+            if(this.accords.length > 0) return
+            this.togglePlaceholder('show')
         })
 
         this.$on('add', val => {
-
             this.isTooltip = false
             EventBus.$emit('accord-added', { lineId: this.id, accord: val.tone+val.type })
         })
@@ -134,8 +142,19 @@ export default {
             if(ev.target.classList.contains('draggable')) return
             this.isTooltip = true
 
+            this.togglePlaceholder('hide')
+
             this.coords.pageX = ev.pageX 
             this.coords.pageY = ev.pageY
+        },
+
+        togglePlaceholder(mode){
+            if (mode == 'hide'){
+                this.$el.querySelector('.placeholder').classList.add('hidden')
+            } else {
+                this.$el.querySelector('.placeholder').classList.remove('hidden')
+            }
+            
         },
 
         handleDblclick(e){
