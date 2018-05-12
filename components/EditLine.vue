@@ -1,37 +1,41 @@
 <template>
 <div class = 'relative'>
-    <tooltip :isShown=isTooltip></tooltip>
-    <div id='editline'>
-        <div class='wrapper'>
-            <div    id='accord-field' 
-                    @drop='drop' 
-                    @dragover='allowDrop'>
+    <tooltip :isShown = isTooltip></tooltip>
+    <div id = 'editline'>
+        <div class = 'line-wrapper'>
+            <div    id = 'accord-field' 
+                    @drop = 'drop' 
+                    @dragover = 'allowDrop'>
                 <div id ='accord-line' 
                     class ='droppable editable'
                     @click = 'showTooltip'>
-                    <p v-bind:class="placeholderClass" >Click to add accords...</p>
-                    <drag-item v-for='acc in accords' :key='acc.id' 
+                    <p :class = 'placeholderClass'>Click to add accords...</p>
+                    <drag-item v-for = 'acc in accords' 
+                        :key = 'acc.id' 
                         :id = 'acc.id'
-                        :text=acc.accord
-                        :handleDrag='dragstart'
-                        :clickCoords= 'Object.keys(coords).length > 0 ?
+                        :text = acc.accord
+                        :handleDrag = 'dragstart'
+                        :clickCoords = 'Object.keys(coords).length > 0 ?
                         coords : acc.coords'
                         :mode = 'mode'
-                        :handleDblclick='handleDblclick'>
+                        :handleDblclick = 'handleDblclick'>
                     </drag-item>
                 </div>
             </div>
             <input 
-                type='text' 
-                name='text-line'
-                placeholder="Add line of song..."
-                id='text-line'
-                @keyup="handleTextUpdate"
-                :value='lineOfSong'
+                type = 'text' 
+                name = 'text-line'
+                placeholder = 'Add line of song...'
+                id = 'text-line'
+                :value = 'lineOfSong'
+                @keyup = 'handleTextUpdate'
             />
             </div>
-        <div class='btn-wrapper'>
-            <button @click='deleteLine' class='orange' type='button'> X </button>
+        <div class = 'btn-wrapper'>
+            <button @click = 'deleteLine' 
+                class = 'orange' 
+                type = 'button'> 
+            X </button>
         </div>
     </div>
 </div>
@@ -44,11 +48,9 @@ import _ from 'lodash'
 export default {
     data(){
         return {
-            chosenAccord: '',
             dragObject: {},
-            toDrag: undefined,
-            isTooltip: false,
             coords: {},
+            isTooltip: false,
         }
     },
     computed: {
@@ -67,53 +69,48 @@ export default {
     mounted(){
         this.$on('close-tooltip', val => {
             this.isTooltip = false
+
             if(this.accords.length > 0) return
             this.togglePlaceholder('show')
         })
 
         this.$on('add-from-tooltip', val => {
             this.isTooltip = false
-            EventBus.$emit('accord-added', { lineId: this.id, accord: val.tone+val.type })
+
+            EventBus.$emit('accord-added', { lineId: this.id, accord: val.tone + val.type })
         })
 
         this.$on('item-added', val => {
+            // To save coordinates of drag item for future positioning
+
             let newlyAdded = this.searchAccord(val.id)
             newlyAdded.coords = val.coords
         })
     },
     methods: {
-
         searchAccord(id){
             return this.accords.filter(acc => acc.id == id)[0]
-        },
-        
-        addAccord(){
-            this.accords.push( {
-                accord: this.chosenAccord,
-                id: this.chosenAccord + "_" + Date.now()
-                
-            })
-            this.chosenAccord = ''
-        },
-
-        getCoords(el){
-            return el.getBoundingClientRect()
         },
 
         dragstart(ev) {
             ev.dataTransfer.setData('Text', ev.target.id);
-            this.toDrag = ev.target.id
+            this.dragObject.toDrag = ev.target.id
             this.dragObject.downX = ev.pageX
             this.dragObject.downY = ev.pageY
-            let coords = this.getCoords(ev.target)
-            this.dragObject.shiftX = this.dragObject.downX //- coords.left
-            this.dragObject.shiftY = this.dragObject.downY //- coords.top
+            // let coords = ev.target.getBoundingClientRect()
+            this.dragObject.shiftX = this.dragObject.downX
+            this.dragObject.shiftY = this.dragObject.downY
+        },
+
+        allowDrop(ev){
+            ev.preventDefault()
         },
 
         drop(ev){
-            ev.preventDefault();
-            if(this.toDrag){
-                let draggable = document.getElementById(this.toDrag)     
+            ev.preventDefault()
+
+            if(this.dragObject.toDrag){
+                let draggable = document.getElementById(this.dragObject.toDrag)     
                 draggable.style.left = ((parseFloat(draggable.style.left) || 0) +  ev.pageX - this.dragObject.shiftX) + 'px'
                 draggable.style.top = ((parseFloat(draggable.style.top) || 0) + ev.pageY - this.dragObject.shiftY) + 'px'
 
@@ -127,19 +124,19 @@ export default {
             }
         },
 
-        allowDrop(ev){
-            ev.preventDefault();
+        handleTextUpdate(ev){
+            EventBus.$emit('new-textline', { text: ev.target.value, lineId: this.id })
         },
 
-        handleTextUpdate(ev){
-            EventBus.$emit('new_line', {text: ev.target.value, lineId: this.id})
+        handleDblclick(e){
+            EventBus.$emit('delete-accord', {lineId: this.id, accordId: e.target.id})
         },
 
         showTooltip(ev){
             if(ev.target.classList.contains('draggable')) return
 
             this.isTooltip = true
-            this.$parent.$emit('tooltip_opened', { lineId: this.id })
+            this.$parent.$emit('tooltip-opened', { lineId: this.id })
 
             this.togglePlaceholder('hide')
 
@@ -153,23 +150,16 @@ export default {
             } else {
                 this.$el.querySelector('.placeholder').classList.remove('hidden')
             }
-            
-        },
-
-        handleDblclick(e){
-            EventBus.$emit('deleteAccord', {lineId: this.id, accordId: e.target.id})
         },
 
         deleteLine(){
-            EventBus.$emit('deleteLine', {id: this.id})
+            EventBus.$emit('delete-line', { id: this.id })
         }
     },
 }
 </script>
 <style>
-    .placeholder {
-        position: absolute;
-    }
+
     .relative{
         position: relative;
         margin-bottom: 20px;
@@ -189,24 +179,22 @@ export default {
         width: 100%;
         background-color: rgba(254, 239, 176, 0.5);
         padding:  3px 7px;
-        font-family: 'Kalam', cursive;
+        font-family: 'Kalam', cursive, 'Arial', sans-serif;
         font-size: 12px;
     }
-
     #accord-line p{
         margin: 0;
         line-height: 20px;
-        color: #d5dadd;
+        position: absolute;
+        color: #afb3b6;
         user-select: none;
     }
-
     #accord-field{
         display: flex;
     }
     #new-accord{
         width: 5vw;
     }
-
     #text-line{
         resize: none;
         border: 1px solid #f1c40f;
@@ -214,8 +202,10 @@ export default {
         box-sizing: border-box;
         padding: 2px 9px;
         width: 100%;
-        font-family: 'Kalam', cursive;
-        font-size: 10px;
+        font-family: 'Kalam', cursive, 'Arial', sans-serif;
+        font-size: 13px;
+        letter-spacing: 0.1vw;
+        height: 28px;
     }
     .orange {
         color: #e67e22;
@@ -226,12 +216,10 @@ export default {
         transform: translateY(-50%);
         cursor: pointer;
     }
-
     .orange:hover {
         color: #FF983C;
     }
-
-    .wrapper{
+    .line-wrapper{
         display: flex;
         width: 95%;
         margin-right: 2%;
@@ -240,8 +228,21 @@ export default {
     .btn-wrapper{
         position: relative;
     }
-
-    
-
+     ::-webkit-input-placeholder {
+        color: #afb3b6;
+        font-size: 14px;
+    }
+    ::-moz-placeholder {
+        color: #afb3b6;
+        font-size: 14px;
+    }
+    :-ms-input-placeholder { 
+        color: #afb3b6;
+        font-size: 14px;
+    }
+    :-moz-placeholder { 
+        color: #afb3b6;
+        font-size: 14px;
+    }
 </style>
 
