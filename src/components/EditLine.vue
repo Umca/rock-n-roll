@@ -8,7 +8,8 @@
                     @dragover = 'allowDrop'>
                 <div id ='accord-line' 
                     class ='droppable editable'
-                    @click = 'showTooltip'>
+                    @click = 'showTooltip'
+                    aria-label = 'place for accords'>
                     <p :class = 'placeholderClass'>Click to add accords...</p>
                     <drag-item v-for = 'acc in accords' 
                         :key = 'acc.id' 
@@ -29,10 +30,12 @@
                 id = 'text-line'
                 :value = 'lineOfSong'
                 @keyup = 'handleTextUpdate'
+                aria-label = 'place for song line'
             />
             </div>
         <div class = 'btn-wrapper'>
             <button @click = 'deleteLine' 
+                aria-label = 'delete line'
                 class = 'orange' 
                 type = 'button'> 
             X </button>

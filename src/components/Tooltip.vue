@@ -6,14 +6,16 @@
                         class = 'chosenItem' 
                         :value = 'chosenTone' 
                         @keyup = 'chooseItem("Tone", $event)'
+                        aria-label = 'chosen tone'
                 />
                 <input  type = 'text' 
                         class = 'chosenItem'
                         :value = 'chosenType'
                         @keyup = 'chooseItem("Type", $event)'
+                        aria-label = 'chosen type'
                 />
             </div>
-            <div class = 'btn green add' @click.self = 'add'>+</div>
+            <button class = 'btn green add' @click.self = 'add' aria-label = 'add accord'>+</button>
         </div>
         <div class = 'options-wrapper'>
             <div id = 'tones' class = 'tooltip-box'>
@@ -23,7 +25,7 @@
                 <div v-for = 'type in types' :key = 'type' @click = 'chooseType(type)'>{{ type }}</div>
             </div>
         </div>
-        <div class = 'close' @click.self = 'close'>x</div>
+        <div class = 'close' @click.self = 'close' aria-label = 'close tooltip'>x</div>
     </div>
 </template>
 <script>

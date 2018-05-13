@@ -3,19 +3,22 @@
         <div id = 'app-control'>
             <button class = 'purple btn'
                 @click = 'start'
+                aria-label = 'start'
             >Start from scratch</button>
             <div id = 'app-download'>
                 <button 
                     type = 'button'
                     class = 'btn purple'
                     @click = 'edit'
-                >Open o edit</button>
+                    aria-label = 'edit'
+                >Open to edit</button>
                 <input type = 'file' 
                     id = "getFile" 
                     class = 'hidden'
-                    @change = 'readFile'>
+                    @change = 'readFile'
+                    aria-label = 'download file'>
             </div>
-            <button class = 'purple btn' @click = 'save'>Save</button>
+            <button class = 'purple btn' @click = 'save' aria-label = 'save'>Save</button>
         </div>
 
         <div id = 'app-errors'
@@ -27,7 +30,11 @@
         <div id = 'app-song'>
             <input type = text placeholder = 'Name of the song...'
                 :value = 'songName'
-                @keyup = 'addSongName'/>
+                @keyup = 'addSongName'
+                aria-label = 'name of the song'/>
+        </div>
+        <div :class = '{"app-positive-message": true, hidden: mode !== "save"}' >
+            <img alt = 'success'  src = '../icons/haha.png'/>
         </div>
         <div id = 'app-lines'>
             <edit-line v-for = 'line in lines' 
@@ -38,7 +45,7 @@
                 :mode = 'mode'
             ></edit-line>
         </div>
-            <button @click = 'addLine' class = 'btn green'> Add line </button>
+            <button @click = 'addLine' class = 'btn green' aria-label = 'add edit line'> Add line </button>
     </div>
 </template>
 
@@ -132,6 +139,9 @@ export default {
 
         /* Control logic: open, save, edit*/
         save(){
+
+            if (this.lines.length == 0) return
+            
             let result = {}
 
             result.songName = this.songName
@@ -155,6 +165,10 @@ export default {
                 a.download = `${this.songName || 'mySuperSong'}.json`;
                 document.body.appendChild(a);
                 a.click();
+
+                this.mode = 'save'
+                this.lines = []
+                this.songName = ''
 
                 setTimeout(function() {
                     document.body.removeChild(a);
@@ -225,6 +239,9 @@ export default {
         color:rgb(240, 60, 60);
         font-family: 'Kalam', cursive, 'Arial', sans-serif;
         font-weight:400;
+    }
+    .app-positive-message{
+        text-align: center;
     }
     .hidden{
         display: none;
