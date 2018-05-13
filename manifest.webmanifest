@@ -1,0 +1,26 @@
+{
+    "name": "Tablature editor",
+    "description": "Awesome tablature editor ever",
+    "short_name": "Editor",
+    "lang": "en-GB",
+    "dir": "ltr",
+    "icons": [
+        {
+            "src": "./icons/512.png",
+            "sizes": "512x512"
+        },
+        {
+         	"src": "./icons/512.png",
+         	"sizes": "192x192"
+        },
+        {
+         	"src": "./icons/512.png",
+         	"sizes": "68x68"
+        }
+    ],
+    "start_url": "/index.html",
+    "display": "fullscreen",
+    "orientation": "landscape",
+    "theme_color": "#2ecc71",
+    "background_color": "#2ecc71"
+}
