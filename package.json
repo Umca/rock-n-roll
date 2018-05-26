@@ -1,11 +1,10 @@
 {
   "name": "dev_challenge",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "compression-webpack-plugin": "^1.1.11",
     "poi": "^10.1.6",
     "vue": "^2.5.16"
   },
