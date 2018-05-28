@@ -3,7 +3,7 @@
         <div class="breed_finder_header"> 
             <p>Choose breed:</p> 
             <input type="search" class="input-field" id="breed_search"
-                @keyup="handleInput"
+                @input="handleInput"
                 :value="chosenBreed" > 
         </div> 
         <ul class="breed_finder_results" style="display: block;">
@@ -13,7 +13,14 @@
 </template>
 <script>
 export default {
-    props: ['breeds', 'handleInput','chosenBreed', 'handleOption']
+    props: ['breeds', 'handleInput','chosenBreed', 'handleOption'],
+
+    methods:{
+        test(e){
+            console.log(e)
+        }
+    }
+
 }
 </script>
 <style>
