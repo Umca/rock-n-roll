@@ -5,7 +5,9 @@ import App from './src/App.vue'
 
 Vue.use(VueGoogleMaps, {
 	load: {
-		key: API_KEYS.GOOGLE_MAPS,
+    key: API_KEYS.GOOGLE_MAPS,
+    language: 'en',
+    region: 'GB'
 	}
 });
 
