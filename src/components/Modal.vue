@@ -142,17 +142,6 @@ export default {
         }
     },
 
-    watch: {
-        animal(){
-            if(this.animal){
-                this.breed = this.types[`${this.animal.toLowerCase()}s`]
-            } else {
-                // debugger
-                this.breed.length = 0
-            }
-        }
-    },
-
     props: ['isShown', 'info'],
 
     components: {
@@ -166,7 +155,7 @@ export default {
 
         handleAnimal(e){
             this.animal = e.target.value
-            // this.breed = this.types[`${e.target.value.toLowerCase()}s`]
+            this.breed = this.types[`${e.target.value.toLowerCase()}s`]
             this.chosenBreed =""
         },
 
