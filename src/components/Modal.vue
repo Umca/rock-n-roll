@@ -7,93 +7,104 @@
         </div>
         <div class="popup-main">
             <div class="popup-form">
-                <div class="popup-form-heading"></div>
                     <form action="" method="" @submit.prevent="save" lang="en">
-                        <label for="name">
-                                <span class="label">Name </span>
-                                <input 
-                                @invalid="invalideMsg"
-                                type="text" 
-                                class="input-field" 
-                                name="name" 
-                                :value="name"
+                        <fieldset>
+                            <legend>Pet</legend>
+                            <label for="animal">
+                                <span class="label">Choose animal</span>
+                                <select 
+                                    name="animal" 
+                                    class="select-field"
+                                    @change="handleAnimal"
+                                    required
+                                    @invalid="invalideMsg"
+                                >
+                                    <option disabled selected value> -- select -- </option>
+                                    <option value="cat">Cat</option>
+                                    <option value="dog">Dog</option>
+                                    <option value="bird">Bird</option>
+                                </select>
+                            </label>
+                                <breed-select 
+                                v-show = "breed.length > 0"
+                                :handleInput="filterBreeds"
+                                :chosenBreed="chosenBreed"
+                                :handleOption="handleOption"
+                                :breeds = "breed"></breed-select>
+                            <label for="age">
+                                <span>Choose age</span>
+                                <input type="number" 
+                                name="age" 
+                                step="0.1" 
+                                class="input-field"
+                                v-model="age"
+                                >
+                            </label>
+                            <label for="color">
+                                <span>Color</span>
+                                <input type="text" 
+                                name="color"  
+                                class="input-field"
+                                v-model='color'
+                                >
+                            </label>
+                            <label for="photo">
+                                <span class="label">Photo URL</span>
+                                <input type="text" 
+                                name="photo"  
+                                class="input-field"
                                 required
-                                />
-                        </label>
-                        <label for="email">
-                            <span class="label" >Email</span>
-                            <input type="email" 
-                            class="input-field" 
-                            name="email" 
-                            :value="email"
-                            />
-                        </label>
-                        <label>
-                            <span class="label">Telephone</span>
-                            <input type="tel" 
-                            class="tel-number-field" 
-                            @invalid="invalideMsg"
-                            required
-                            name="tel" 
-                            :value="tel"
-                            maxlength="15"
-                            />
-                        </label>
-                        <label for="animal">
-                            <span class="label">Choose animal</span>
-                            <select 
-                                name="animal" 
-                                class="select-field"
-                                @change="handleAnimal"
-                                required
                                 @invalid="invalideMsg"
-                            >
-                                <option disabled selected value> -- select -- </option>
-                                <option value="cat">Cat</option>
-                                <option value="dog">Dog</option>
-                                <option value="bird">Bird</option>
-                            </select>
-                        </label>
-                            <breed-select 
-                            v-show = "breed.length > 0"
-                            :handleInput="filterBreeds"
-                            :chosenBreed="chosenBreed"
-                            :handleOption="handleOption"
-                            :breeds = "breed"></breed-select>
-                        <label for="age">
-                            <span>Choose age</span>
-                            <input type="number" 
-                            name="age" 
-                            step="0.1" 
-                            class="input-field"
-                            :value="age"
-                            >
-                        </label>
-                        <label for="color">
-                            <span>Color</span>
-                            <input type="text" 
-                            name="color"  
-                            class="input-field"
-                            :value='color'
-                            >
-                        </label>
-                        <label for="photo">
-                            <span class="label">Photo URL</span>
-                            <input type="text" 
-                            name="photo"  
-                            class="input-field"
-                            required
-                            @invalid="invalideMsg"
-                            :value="photo"
-                            >
-                        </label>
-                        <label>
+                                :v-model="photo"
+                                >
+                            </label>
+                            <label>
                             <span>&nbsp;</span>
                             <input 
                             type="submit" 
                             value="Save" 
                             /></label>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Your contacts</legend>
+                            <label for="name">
+                                    <span class="label">Name </span>
+                                    <input 
+                                    @invalid="invalideMsg"
+                                    type="text" 
+                                    class="input-field" 
+                                    name="name" 
+                                    v-model="name"
+                                    required
+                                    />
+                            </label>
+                            <label for="email">
+                                <span class="label" >Email</span>
+                                <input type="email" 
+                                class="input-field" 
+                                name="email" 
+                                v-model="email"
+                                />
+                            </label>
+                            <label>
+                                <span class="label">Telephone</span>
+                                <input type="tel" 
+                                class="tel-number-field" 
+                                @invalid="invalideMsg"
+                                required
+                                name="tel" 
+                                v-model="tel"
+                                maxlength="15"
+                                />
+                            </label>
+                        </fieldset>
                     </form>
+
+                    <label for="toDelete" class="popup-delete">Delete ?</label>
+                        <input type="checkbox" name="toDelete"/>
+                        <span class="checkmark"></span>
+                    
+                    
             </div>
         </div>
         <div class='popup-foot'>
