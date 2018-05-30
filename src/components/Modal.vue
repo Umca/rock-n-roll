@@ -32,7 +32,7 @@
                                     :chosenBreed="chosenBreed"
                                     :handleOption="handleOption"
                                     :breeds = "breed"></breed-select>
-                                <label for="age">
+                                <!-- <label for="age">
                                     <span>Choose age</span>
                                     <input type="number" 
                                     name="age" 
@@ -40,7 +40,15 @@
                                     class="input-field"
                                     v-model="age"
                                     >
-                                </label>
+                                </label> -->
+                                <input-field
+                                    v-model="age"
+                                    type="number"
+                                    label="Animal age"
+                                    name="age"
+                                    step="0.1"
+                                ></input-field>
+
                                 <label for="color">
                                     <span>Color</span>
                                     <!-- <input type="text" 
@@ -54,7 +62,14 @@
                                     v-model='color'
                                     >
                                 </label>
-                                <label for="photo">
+
+                                <input-field
+                                    v-model='photo'
+                                    type="text"
+                                    label="Photo URL"
+                                    name="photo"
+                                ></input-field>
+                                <!-- <label for="photo">
                                     <span class="label">Photo URL</span>
                                     <input type="text" 
                                     name="photo"  
@@ -63,12 +78,12 @@
                                     @invalid="invalideMsg"
                                     :v-model="photo"
                                     >
-                                </label>
+                                </label> -->
                                 
                             </fieldset>
                             <fieldset>
                                 <legend>Your contacts</legend>
-                                <label for="name">
+                                <!-- <label for="name">
                                         <span class="label">Name </span>
                                         <input 
                                         @invalid="invalideMsg"
@@ -78,16 +93,28 @@
                                         v-model="name"
                                         required
                                         />
-                                </label>
-                                <label for="email">
+                                </label> -->
+                                <input-field
+                                    v-model="name"
+                                    type="text"
+                                    name="name"
+                                    label="Name"
+                                ></input-field>
+                                <!-- <label for="email">
                                     <span class="label" >Email</span>
                                     <input type="email" 
                                     class="input-field" 
                                     name="email" 
                                     v-model="email"
                                     />
-                                </label>
-                                <label>
+                                </label> -->
+                                <input-field
+                                    v-model="email"
+                                    type="text"
+                                    name="email"
+                                    label="Email"
+                                ></input-field>
+                                <!-- <label>
                                     <span class="label">Telephone</span>
                                     <input type="tel" 
                                     class="tel-number-field" 
@@ -97,7 +124,14 @@
                                     v-model="tel"
                                     maxlength="15"
                                     />
-                                </label>
+                                </label> -->
+                                <input-field
+                                    v-model="tel"
+                                    type="tel"
+                                    name="tel"
+                                    label="Telephone"
+                                    maxlength="15"
+                                ></input-field>
                                 <div class="status-container">
                                     <input type="checkbox" name="status" id="status" v-model='found'>
                                     <label for="status">
@@ -106,18 +140,19 @@
                                 </div>
                             </fieldset>
                         </div>
-                        <label>
-                            <input 
-                            type="submit" 
-                            value="Save" 
-                            /></label>
-                    </form>
-
-                    <label class="popup-delete">Delete ?
-                        <input type="checkbox" name="toDelete" v-model='toDelete'/>
-                        <span class="checkmark"></span>
-                    </label>
-                    
+                        <div class='control-buttons'>
+                            <label>
+                                <input 
+                                type="submit" 
+                                value="Save" 
+                                />
+                            </label>
+                            <label class="popup-delete">Delete ?
+                                <input type="checkbox" name="toDelete" v-model='toDelete'/>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </form>                    
             </div>
         </div>
         <div class='popup-foot'>
@@ -131,6 +166,7 @@
 <script>
 import { EventBus } from '../utils/eventBus'
 import BreedSelect from './BreedSelect'
+import InputField from './InputField'
 import { cats, dogs, birds } from '../utils/data'
 
 export default {
@@ -171,7 +207,8 @@ export default {
     props: ['isShown', 'info'],
 
     components: {
-        'breed-select': BreedSelect
+        'breed-select': BreedSelect,
+        'input-field':InputField
     },
 
     methods: {
@@ -259,7 +296,7 @@ export default {
     padding: 0;
     width: 38%;
     min-width: 630px;
-    height: 500px;
+    height: 480px;
     /* overflow: auto; */
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
@@ -277,7 +314,7 @@ export default {
 }
 .popup-main {
     padding: 2px 16px;
-    height: 68%;
+    height: 64.6%;
     overflow: auto;
 }
 .popup-form{
@@ -292,11 +329,11 @@ export default {
     display: block;
     margin: 0px 0px 15px 0px;
 }
-.popup-form form label > span{
+.popup-form form  fieldset label > span{
     width: 105px;
     font-weight: bold;
     float: left;
-    /* padding-top: 8px; */
+    padding-top: 8px;
     padding-right: 20px;
 }
 .popup-form span.required{
@@ -327,7 +364,7 @@ export default {
 .popup-form .input-field:focus, 
 .popup-form .tel-number-field:focus,  
 .popup-form .select-field:focus{
-    border: 1px solid #0C0;
+    border: 1px solid #8fbefa;
 }
 .popup-form input[type=submit],
 .popup-form input[type=button]{
@@ -335,6 +372,7 @@ export default {
     padding: 8px 15px 8px 15px;
     background: #FF8500;
     color: #fff;
+    font-size: 16px;
     box-shadow: 1px 1px 4px #DADADA;
     -moz-box-shadow: 1px 1px 4px #DADADA;
     -webkit-box-shadow: 1px 1px 4px #DADADA;
@@ -346,6 +384,7 @@ export default {
 .popup-form input[type=button]:hover{
     background: #EA7B00;
     color: #fff;
+    cursor: pointer;
 }
 .popup-form .label:after{
     content: ' *';
@@ -355,8 +394,12 @@ export default {
     position: relative;
 }
 
+.popup-form .status-container .status{
+    padding-top: 6px;
+}
+
 .popup-form .status-container input{
-    opacity: 0;
+    display: none;
 }
 
 .popup-form .status-container span::before,
@@ -392,14 +435,19 @@ export default {
     background-color: #FF8500;
 }
 
+.popup-form .control-buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .popup-form .popup-delete {
   display: block;
   position: relative;
   padding-left: 35px;
-  margin-bottom: 12px;
+  padding-top: 4px;
   cursor: pointer;
-  font-size: 19px;
-  float: right;
+  font-size: 16px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -408,7 +456,7 @@ export default {
 
 .popup-delete input {
   position: absolute;
-  opacity: 0;
+  display: none;
   cursor: pointer;
 }
 
@@ -417,16 +465,20 @@ export default {
   top: 0;
   left: 0;
   height: 25px;
-  width: 25px;
   background-color: #eee;
+  padding-right: 0;
+  padding-top: 0;
+  width: 25px;
 }
 
 .popup-delete:hover input ~ .checkmark {
-  background-color: #ccc;
+    background-color: #ccc;
+    width: 25px;
 }
 
 .popup-delete input:checked ~ .checkmark {
-  background-color: #FF8500;
+    width: 25px;
+    background-color: #FF8500;
 }
 
 .checkmark:after {
@@ -479,6 +531,7 @@ export default {
     float: right;
     font-size: 28px;
     font-weight: bold;
+    padding-top: 2px;
 }
 .close:hover, .close:focus {
     color: #000;
