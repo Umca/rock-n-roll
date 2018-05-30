@@ -83,10 +83,10 @@ export default {
 
         EventBus.$on('modal_closed', () => this.closeModal())
 
-        EventBus.$on('new_marker', (o) => {
+        EventBus.$on('new_marker', (ev) => {
 
             this.closeModal()
-            this.addNewMarker(o)
+            this.addNewMarker(ev.result)
             
         })
 
@@ -106,7 +106,7 @@ export default {
             this.canAddNewMarkers = !this.canAddNewMarkers
         },
 
-        addNewMarker(){
+        addNewMarker(o){
             this.newMarker.info = {
                 photo: o.photo,
                 animal: o.animal,
