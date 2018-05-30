@@ -36,7 +36,7 @@ export default {
     methods: {
         
         validationCheck(ev){
-            if(!this.type !== 'number' && !this.type !== 'text'){
+            if(!(this.type !== 'number' || !this.type !== 'text')){
                 let answer = this[`validate${this.name.slice(0,1).toUpperCase() + this.name.slice(1)}`](ev.target.value)
                 if(answer.isValid){
                     this.$el.children[0].classList.add('valid')

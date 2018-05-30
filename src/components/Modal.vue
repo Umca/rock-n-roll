@@ -35,6 +35,14 @@
                                 ></breed-select>
 
                                 <input-field
+                                    v-model="nickname"
+                                    type="text"
+                                    label="Animal name"
+                                    name="nickname"
+
+                                ></input-field>
+
+                                <input-field
                                     v-model="age"
                                     type="number"
                                     label="Animal age"
@@ -146,6 +154,7 @@ export default {
             email: '',
             tel: '',
             photo: '',
+            nickname:'',
             found: false,
 
             toDelete: false
@@ -216,6 +225,7 @@ export default {
             result.color = this.color === "#f210f8" ? false : this.color
             result.age = this.age
             result.photo = this.photo
+            result.nickname = this.nickname
 
             EventBus.$emit('new_marker', {
                     result
@@ -233,10 +243,11 @@ export default {
             this.email = ''
             this.tel = ''
             this.photo = ''
-            this.status = false
+            this.found= false
+            this.nickname = nickname
         },
 
-                invalideMsg(ev){
+        invalideMsg(ev){
             ev.target.setCustomValidity('');
             if (!ev.target.validity.valid){
                 ev.target.setCustomValidity('This field is required.')

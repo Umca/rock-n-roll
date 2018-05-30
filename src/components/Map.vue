@@ -79,6 +79,8 @@ export default {
                     this.center.lat = position.coords.latitude
                     this.center.lng = position.coords.longitude
 
+                    EventBus.$emit('user_position', this.center)
+
                 } catch(e) {
                     alert('We can not get your coords!')
                 }
@@ -143,7 +145,7 @@ export default {
             this.infoWindowTemplate = `
             <div class="info-content">
                 <div class="info-head">
-                    <h2>This cute is ${m.info.status}</h2>
+                    <h2>This cute is ${m.info.found}</h2>
                 </div>
                 <div class="info-main">
                     <div class="info-main__photo">
