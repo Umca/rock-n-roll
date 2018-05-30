@@ -116,9 +116,9 @@ export default {
                 name: o.name,
                 tel: o.tel,
                 email: o.email,
-                status: "lost",
+                status: o.found,
             }
-            this.newMarker.icon = this.icons[this.newMarker.info.status]
+            this.newMarker.icon = this.icons[`${this.newMarker.info.status ? 'found' : 'lost'}`]
 
             this.markers.push(this.newMarker)
 
