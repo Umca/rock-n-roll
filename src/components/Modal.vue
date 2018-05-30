@@ -26,27 +26,22 @@
                                         <option value="bird">Bird</option>
                                     </select>
                                 </label>
-                                    <breed-select 
+
+                                <breed-select 
                                     v-show = "breed.length > 0"
                                     :handleInput="filterBreeds"
                                     :chosenBreed="chosenBreed"
                                     :handleOption="handleOption"
-                                    :breeds = "breed"></breed-select>
-                                <!-- <label for="age">
-                                    <span>Choose age</span>
-                                    <input type="number" 
-                                    name="age" 
-                                    step="0.1" 
-                                    class="input-field"
-                                    v-model="age"
-                                    >
-                                </label> -->
+                                    :breeds = "breed"
+                                ></breed-select>
+
                                 <input-field
                                     v-model="age"
                                     type="number"
                                     label="Animal age"
                                     name="age"
                                     step="0.1"
+
                                 ></input-field>
 
                                 <label for="color">
@@ -68,68 +63,34 @@
                                     type="text"
                                     label="Photo URL"
                                     name="photo"
+                                    isRequired="true"
                                 ></input-field>
-                                <!-- <label for="photo">
-                                    <span class="label">Photo URL</span>
-                                    <input type="text" 
-                                    name="photo"  
-                                    class="input-field"
-                                    required
-                                    @invalid="invalideMsg"
-                                    :v-model="photo"
-                                    >
-                                </label> -->
                                 
                             </fieldset>
                             <fieldset>
                                 <legend>Your contacts</legend>
-                                <!-- <label for="name">
-                                        <span class="label">Name </span>
-                                        <input 
-                                        @invalid="invalideMsg"
-                                        type="text" 
-                                        class="input-field" 
-                                        name="name" 
-                                        v-model="name"
-                                        required
-                                        />
-                                </label> -->
+    
                                 <input-field
                                     v-model="name"
                                     type="text"
                                     name="name"
                                     label="Name"
+                                    isRequired="true"
                                 ></input-field>
-                                <!-- <label for="email">
-                                    <span class="label" >Email</span>
-                                    <input type="email" 
-                                    class="input-field" 
-                                    name="email" 
-                                    v-model="email"
-                                    />
-                                </label> -->
+      
                                 <input-field
                                     v-model="email"
                                     type="text"
                                     name="email"
                                     label="Email"
                                 ></input-field>
-                                <!-- <label>
-                                    <span class="label">Telephone</span>
-                                    <input type="tel" 
-                                    class="tel-number-field" 
-                                    @invalid="invalideMsg"
-                                    required
-                                    name="tel" 
-                                    v-model="tel"
-                                    maxlength="15"
-                                    />
-                                </label> -->
+
                                 <input-field
                                     v-model="tel"
                                     type="tel"
                                     name="tel"
                                     label="Telephone"
+                                    isRequired=true
                                     maxlength="15"
                                 ></input-field>
                                 <div class="status-container">

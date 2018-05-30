@@ -1,14 +1,15 @@
 <template>
     <label :for="name">
-        <span>{{label}}</span>
+        <span :class="{label: isRequired}">{{label}}</span>
         <input :type="type" 
-        :name="name"
-        :value="value"
-        @input="$emit('input', $event.target.value)"
-        :step="step" 
-        :maxlength="maxlength"
-        class="input-field"
-        >
+            :name="name"
+            :value="value"
+            @input="$emit('input', $event.target.value)"
+            :step="step" 
+            :maxlength="maxlength"
+            class="input-field"
+            :required="isRequired"
+        />
     </label>
 </template>
 <script>
@@ -19,7 +20,8 @@ export default {
         'label',
         'step',
         'value',
-        'maxlength'
+        'maxlength',
+        'isRequired'
     ]
 }
 </script>
