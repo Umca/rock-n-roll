@@ -7,20 +7,19 @@
         </div>
         <div class="popup-main">
             <div class="popup-form">
-                    <form action="" method="" @submit.prevent="save" lang="en">
+                    <form action="" method="" @submit.prevent="save">
                         <div class="fieldsets-container">
                             <fieldset>
                                 <legend>Pet</legend>
                                 <label for="animal">
-                                    <span class="label">Choose animal</span>
                                     <select 
+                                        required
                                         name="animal" 
                                         class="select-field"
                                         @change="handleAnimal"
-                                        required
-                                        @invalid="invalideMsg"
+                                        
                                     >
-                                        <option disabled selected value> -- select -- </option>
+                                        <option disabled selected class="disabled"> Choose animal</option>
                                         <option value="cat">Cat</option>
                                         <option value="dog">Dog</option>
                                         <option value="bird">Bird</option>
@@ -44,29 +43,31 @@
 
                                 ></input-field>
 
+                                <input-field
+                                    v-model='photo'
+                                    type="url"
+                                    label="Photo URL"
+                                    name="photo"
+                                    isRequired="true"
+                                ></input-field>
+
                                 <label for="color">
                                     <span>Color</span>
-                                    <!-- <input type="text" 
-                                    name="color"  
-                                    class="input-field"
-                                    v-model='color'
-                                    > -->
                                     <input type="color" 
                                     name="color"  
                                     class="input-field"
                                     v-model='color'
                                     >
                                 </label>
-
-                                <input-field
-                                    v-model='photo'
-                                    type="text"
-                                    label="Photo URL"
-                                    name="photo"
-                                    isRequired="true"
-                                ></input-field>
-                                
+                                <div class="status-container">
+                                    <input type="checkbox" name="status" id="status" v-model='found'>
+                                    <label for="status">
+                                        <span >{{statusText}}</span>
+                                        <span class="status"></span>
+                                    </label>
+                                </div>
                             </fieldset>
+
                             <fieldset>
                                 <legend>Your contacts</legend>
     
@@ -93,14 +94,10 @@
                                     isRequired=true
                                     maxlength="15"
                                 ></input-field>
-                                <div class="status-container">
-                                    <input type="checkbox" name="status" id="status" v-model='found'>
-                                    <label for="status">
-                                        <span class="status">{{statusText}}<span style="color: #FF8500"> *</span></span>
-                                    </label>
-                                </div>
+                                
                             </fieldset>
                         </div>
+
                         <div class='control-buttons'>
                             <label>
                                 <input 
@@ -158,9 +155,9 @@ export default {
     computed:{
         statusText(){
             if(this.found){
-                return 'FOUND'
+                return 'Found'
             } else {
-                return 'LOST'
+                return 'Lost'
             }
         }
     },
@@ -170,6 +167,15 @@ export default {
     components: {
         'breed-select': BreedSelect,
         'input-field':InputField
+    },
+
+    mounted(){
+        let select = document.querySelector('select')
+        for(let i = 0 ; i < select.children.length; i++){
+            if(!select.children[i].dataset.hasOwnProperty('default')){
+                select.children[i].style.color= 'black'
+            }
+        }
     },
 
     methods: {
@@ -190,13 +196,6 @@ export default {
 
         handleOption(val){
             this.chosenBreed = val
-        },
-
-        invalideMsg(ev){
-            ev.target.setCustomValidity('');
-            if (!ev.target.validity.valid){
-                ev.target.setCustomValidity('This field is required.')
-            }
         },
 
         save(e){
@@ -229,12 +228,19 @@ export default {
             this.tel = ''
             this.photo = ''
             this.status = false
-        }
+        },
+
+                invalideMsg(ev){
+            ev.target.setCustomValidity('');
+            if (!ev.target.validity.valid){
+                ev.target.setCustomValidity('This field is required.')
+            }
+        },
     }
     
 }
 </script>
->
+
 <style scoped>
 .popup {
     display: block;
@@ -257,8 +263,6 @@ export default {
     padding: 0;
     width: 38%;
     min-width: 630px;
-    height: 480px;
-    /* overflow: auto; */
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
@@ -275,8 +279,6 @@ export default {
 }
 .popup-main {
     padding: 2px 16px;
-    height: 64.6%;
-    overflow: auto;
 }
 .popup-form{
     padding: 20px 12px 10px 20px;
@@ -284,43 +286,34 @@ export default {
 }
 .popup-form .fieldsets-container{
     display: flex;
+    justify-content: space-between;
     margin-bottom: 20px;
 }
 .popup-form form label{
-    display: block;
+    display: flex;
+    justify-content: space-between;
     margin: 0px 0px 15px 0px;
 }
-.popup-form form  fieldset label > span{
-    width: 105px;
-    font-weight: bold;
-    float: left;
-    padding-top: 8px;
-    padding-right: 20px;
+
+.popup-form select{
+    width: 100%; 
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: none;
+    box-shadow: none;
+    padding: 7px 0;
 }
-.popup-form span.required{
-    color:red;
-}
-.popup-form .tel-number-field{
-    width: 48%;
-}
-.popup-form input.input-field, .popup-form .select-field{
-    width: 48%; 
-}
-.popup-form input.input-field, 
-.popup-form .tel-number-field, 
-.popup-form .select-field{
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    border: 1px solid #C2C2C2;
-    box-shadow: 1px 1px 4px #EBEBEB;
-    -moz-box-shadow: 1px 1px 4px #EBEBEB;
-    -webkit-box-shadow: 1px 1px 4px #EBEBEB;
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    padding: 7px;
+.popup-form select:focus{
     outline: none;
+    border-bottom-color: rgb(113, 166, 252);
+}
+.popup-form select option::selected{
+    color: black;
+    text-transform: capitalize;
+}
+
+label > span{
+    padding-top: 8px;
 }
 .popup-form .input-field:focus, 
 .popup-form .tel-number-field:focus,  
@@ -351,6 +344,13 @@ export default {
     content: ' *';
     color: #FF8500;
 }
+.popup-form input[type=color]{
+    padding: 0;
+    height: 30px;
+    width: 30px;
+    border: none;
+    background-color: white;
+}
 .popup-form .status-container{
     position: relative;
 }
@@ -362,9 +362,14 @@ export default {
 .popup-form .status-container input{
     display: none;
 }
-
-.popup-form .status-container span::before,
-.popup-form .status-container span::after{
+.popup-form .status-container .status{
+    position: relative;
+    width: 45px;
+    padding: 0;
+    margin-bottom: 0;
+}
+.popup-form .status-container .status::before,
+.popup-form .status-container .status::after{
     content: '';
     position: absolute;
     top: 0;
@@ -375,16 +380,15 @@ export default {
     cursor: pointer;
 }
 .popup-form .status-container span.status:before{
-    left: 125px;
-    top: 25px;
     width: 45px;
+    left: 0;
     height: 25px;
     background-color: #ccc;
     border-radius: 50px;
 }
 .popup-form .status-container span.status:after{
-    left: 129px;
-    top: 25px;
+    /* left: 201px; */
+    left: 5px;
     width: 17px;
     height: 17px;
     border-radius: 10px;
@@ -392,8 +396,12 @@ export default {
     transition: left .25s, background-color .25s;
 }
 .popup-form .status-container  input[type="checkbox"]:checked + label span.status::after{
-    left: 148px;
+    left: 23px;
     background-color: #FF8500;
+}
+
+.popup-form .status-container .status + label{
+    margin-bottom: 10px;
 }
 
 .popup-form .control-buttons{
@@ -486,7 +494,6 @@ export default {
     to {top:0; opacity:1}
 }
 
-/* close button style */
 .close {
     color: #FF8500;
     float: right;
@@ -503,6 +510,8 @@ export default {
 fieldset{
     border: 1px solid #ccc;
     border-radius: 5px;
+    width: 44%;
+    padding: 10px 1em;
 }
 
 legend{
