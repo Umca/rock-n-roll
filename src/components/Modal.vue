@@ -105,7 +105,7 @@
                                 value="Save" 
                                 />
                             </label>
-                            <label class="popup-delete">Delete ?
+                            <label class="popup-delete">Delete
                                 <input type="checkbox" name="toDelete" v-model='toDelete'/>
                                 <span class="checkmark"></span>
                             </label>
@@ -181,6 +181,7 @@ export default {
     methods: {
         close(){
             EventBus.$emit('modal_closed')
+            this.cleanState()
         },
 
         handleAnimal(e){
@@ -191,7 +192,12 @@ export default {
 
         filterBreeds(ev){
             this.chosenBreed = ev.target.value
-            this.breed = this.types[`${this.animal.toLowerCase()}s`].filter(e => e.toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1)
+            let temp = this.types[`${this.animal.toLowerCase()}s`].filter(e => e.toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1)
+            if(temp.length > 0){
+                this.breed = temp
+            } else {
+                this.breed = this.types[`${this.animal.toLowerCase()}s`]
+            }
         },
 
         handleOption(val){
