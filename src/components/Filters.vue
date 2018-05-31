@@ -207,9 +207,10 @@ export default {
         padding: 2px 16px;
         background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQIW2M8cnjffxtbJ0YGKAAzkAXhMjBBuABMJQAWEA9J3TkpgAAAAABJRU5ErkJggg==);
         color: black;
-        position: sticky;
-        top: -1px;
         text-align: center;
+    }
+    .filters-head h2{
+        font-size: 1.15em;
     }
 
 </style>

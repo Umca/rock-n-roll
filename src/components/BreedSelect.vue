@@ -18,13 +18,6 @@
 <script>
 export default {
     props: ['breeds', 'handleInput','chosenBreed', 'handleOption'],
-
-    methods:{
-        test(e){
-            console.log(e)
-        }
-    }
-
 }
 </script>
 <style>

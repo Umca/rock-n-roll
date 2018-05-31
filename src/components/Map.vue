@@ -70,7 +70,6 @@ export default {
                 'Click to enable map editing',
                 'Add marker',
                 function() {
-                    console.log(this.children)
                     this.children[0].innerHTML = "Cancel this mode"
                     EventBus.$emit('new_markers_mode')
                     document.querySelector(".gm-style:first-of-type > div:nth-child(1)").style.cursor = "crosshair"
@@ -151,7 +150,6 @@ export default {
         },
 
         cancelMarkersAdding(e){
-            console.log(document.querySelector('.controlUIText'))
             document.querySelector('.controlUIText').children[0].innerHTML = "Add marker"
             document.querySelector(".gm-style:first-of-type > div:nth-child(1)").style.cursor = 'url("https://maps.gstatic.com/mapfiles/openhand_8_8.cur"), default'
             EventBus.$emit('new_markers_mode')
