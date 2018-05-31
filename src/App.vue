@@ -178,14 +178,11 @@ export default {
 
             this.filtered = this.filterFn(this.markers, ev)
         })
+    },
 
-        // EventBus.$on('user_position', (pos) => {
-        //     debugger
-        //     this.userCoords.lat = pos.lat
-        //     this.userCoords.lng = pos.lng
-        //     this.filtered = this.filterFn(this.markers)
-        // } )
-
+    beforeUpdate(){
+        if(!this.filtersOpened ) document.querySelector('.controlUIImg').style.backgroundImage = "url(https://cdn.icon-icons.com/icons2/621/PNG/128/magnifier-tool_icon-icons.com_56918.png)" 
+            if(this.filtersOpened) document.querySelector('.controlUIImg').style.backgroundImage = "url(https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/cross-24-512.png)"
     },
 
     methods: {
@@ -198,7 +195,10 @@ export default {
         },
 
         toggleFilters(){
+            
             this.filtersOpened = !this.filtersOpened
+            // this.$forceUpdate();
+
         },
 
         toggleAddMarkersMode(){
@@ -225,27 +225,14 @@ export default {
         },
 
         filterFn(arr, filterObj){
-            console.log(filterObj)
             if(!Object.keys(filterObj).length) return arr
 
             let res = []
-            // let copy = JSON.parse(JSON.stringify(arr))
 
             for(let key in filterObj){
                 if(filterObj.hasOwnProperty(key)){
 
-                    // let temp = []
-                
-                    // if(key === 'radius'){
                        res = [...this.filterFab.filter(res.length ? res : arr, {param: key, value: filterObj[key]}, this.userCoords)]
-                    // } else {
-                    //     temp = this.filterFab.filter(copy, {param: key, value: filterObj[key]})
-                    // }
-
-                    // console.log(temp)
-
-                    // res = [...temp]
-                    // copy = temp
                 }
             }
 
