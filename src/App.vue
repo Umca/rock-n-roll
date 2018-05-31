@@ -140,6 +140,14 @@ export default {
         'filter-component': Filters
     },
 
+    watch: {
+
+        markers(oldValue, newValue) {
+            this.filtered = newValue
+        }
+
+    },
+
     mounted(){
 
         this.filtered = JSON.parse(JSON.stringify(this.markers))
@@ -217,26 +225,27 @@ export default {
         },
 
         filterFn(arr, filterObj){
+            console.log(filterObj)
             if(!Object.keys(filterObj).length) return arr
 
             let res = []
-            let copy = JSON.parse(JSON.stringify(arr))
+            // let copy = JSON.parse(JSON.stringify(arr))
 
             for(let key in filterObj){
                 if(filterObj.hasOwnProperty(key)){
 
-                    let temp = []
+                    // let temp = []
                 
-                    if(key === 'radius'){
-                        temp = this.filterFab.filter(copy, {param: key, value: filterObj[key]}, this.userCoords)
-                    } else {
-                        temp = this.filterFab.filter(copy, {param: key, value: filterObj[key]})
-                    }
+                    // if(key === 'radius'){
+                       res = [...this.filterFab.filter(res.length ? res : arr, {param: key, value: filterObj[key]}, this.userCoords)]
+                    // } else {
+                    //     temp = this.filterFab.filter(copy, {param: key, value: filterObj[key]})
+                    // }
 
-                    console.log(temp)
+                    // console.log(temp)
 
-                    res = [...temp]
-                    copy = temp
+                    // res = [...temp]
+                    // copy = temp
                 }
             }
 

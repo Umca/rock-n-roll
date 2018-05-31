@@ -25,7 +25,6 @@ class Filter{
     }
 
     colorFilter(arr, val) {
-        debugger
         let mainRgb = this.hexToRgb(val)
 
         return arr.filter(item => {
