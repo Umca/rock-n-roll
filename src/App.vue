@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="wrapper">
+        <filter-component :isShown = 'filtersOpened'></filter-component>
         <google-map :markers='filtered' :canAddNewMarkers="canAddNewMarkers"></google-map>
         <modal-window :isShown = 'modalOpened'></modal-window>
     </div>
@@ -10,6 +11,7 @@
 import { EventBus }  from './utils/eventBus'
 import Map from './components/Map'
 import Modal from './components/Modal'
+import Filters from './components/Filters'
 import { Filter } from './utils/filter'
 
 export default {
@@ -21,66 +23,70 @@ export default {
                 found: 'https://imageshack.com/a/img924/2561/hD8g3T.png'
             },
             modalOpened: false,
+            filtersOpened: false,
             markers: [
                 {
                     index: 1,
                     position: {
-                        lat: 50,
-                        lng: 30
+                        lat: 50.451904988707426,
+                        lng: 30.365139904949842
                     },
                     icon: 'https://imageshack.com/a/img924/7901/R6u2Bq.png',
                     info: {
                         found: false,
                         photo: "https://i.imgur.com/Qha68YE.jpg",
                         animal: 'cat',
-                        color: 'grey',
+                        color: '#2d292b',
                         age: 1,
                         breed: "home",
                         name: "olya",
+                        nickname: 'Black',
                         email: "fhkfjhf@jfjk"
                     }
                 },
                 {
                     index: 2,
                     position: {
-                        lat: 50.5,
-                        lng: 30.123
+                        lat: 50.46982699187444,
+                        lng: 30.366856518719374
                     },
                     icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
                     info: {
                         found: true,
                         photo: "https://i.imgur.com/oaHmbG7.jpg",
                         animal: 'dog',
-                        color: 'black',
+                        color: '#191216',
                         age: 1,
                         breed: "home",
                         name: "olya",
+                        nickname: 'zaya',
                         email: "fhkfjhf@jfjk"
                     }
                 },
                 {
                     index: 3,
                     position: {
-                        lat: 50.43,
-                        lng: 30.48
+                        lat: 50.43259536449169,
+                        lng: 30.35317987194628
                     },
                     icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
                     info: {
                         found: true,
                         photo: "https://i.imgur.com/oaHmbG7.jpg",
                         animal: 'dog',
-                        color: 'black',
+                        color: '#bf2f81',
                         age: 1,
                         breed: "home",
                         name: "olya",
+                        nickname: '',
                         email: "fhkfjhf@jfjk"
                     }
                 },
                 {
                     index: 4,
                     position: {
-                        lat: 50.4833,
-                        lng: 30.567
+                        lat: 50.42160419408208,
+                        lng: 30.274702976143203
                     },
                     icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
                     info: {
@@ -91,6 +97,7 @@ export default {
                         age: 1,
                         breed: "home",
                         name: "olya",
+                        nickname: '',
                         email: "fhkfjhf@jfjk"
                     }
                 },
@@ -107,26 +114,11 @@ export default {
                         animal: 'dog',
                         color: 'black',
                         age: 1,
-                        breed: "home",
+                        breed: "barbet",
                         name: "olya",
+                        nickname: 'smith',
                         email: "fhkfjhf@jfjk"
                     }
-                }
-            ],
-
-            filters: [
-                // {
-                //     param: 'animal',
-                //     value: 'cat'
-                // },
-                // {
-                //     param: 'found',
-                //     value: false
-                // }
-                
-                {
-                    param: 'radius',
-                    value: 10
                 }
             ],
 
@@ -144,16 +136,15 @@ export default {
 
     components: {
         'google-map': Map,
-        'modal-window': Modal
+        'modal-window': Modal,
+        'filter-component': Filters
     },
 
     mounted(){
 
-        console.log(this.filters)
-
         this.filtered = JSON.parse(JSON.stringify(this.markers))
 
-        this.filterObj = new Filter()
+        this.filterFab = new Filter()
 
         EventBus.$on('modal_opened', (ev) => {
             this.newMarker.position = ev.position
@@ -171,12 +162,21 @@ export default {
 
         EventBus.$on('new_markers_mode', () => this.toggleAddMarkersMode())
 
-        EventBus.$on('user_position', (pos) => {
-            debugger
-            this.userCoords.lat = pos.lat
-            this.userCoords.lng = pos.lng
-            this.filtered = this.filterFn(this.markers)
-        } )
+        EventBus.$on('filters_toggle', () => this.toggleFilters())
+
+        EventBus.$on('filter_apply', (ev) => {
+            this.userCoords.lat = 50.4514007
+            this.userCoords.lng = 30.352864900000004
+
+            this.filtered = this.filterFn(this.markers, ev)
+        })
+
+        // EventBus.$on('user_position', (pos) => {
+        //     debugger
+        //     this.userCoords.lat = pos.lat
+        //     this.userCoords.lng = pos.lng
+        //     this.filtered = this.filterFn(this.markers)
+        // } )
 
     },
 
@@ -187,6 +187,10 @@ export default {
 
         closeModal(){
             this.modalOpened = false
+        },
+
+        toggleFilters(){
+            this.filtersOpened = !this.filtersOpened
         },
 
         toggleAddMarkersMode(){
@@ -212,30 +216,41 @@ export default {
             this.indexCounter++
         },
 
-        filterFn(arr){
-            if(!this.filters.length) return arr
+        filterFn(arr, filterObj){
+            if(!Object.keys(filterObj).length) return arr
 
             let res = []
             let copy = JSON.parse(JSON.stringify(arr))
-            if(this.filters.length > 0){
+
+            for(let key in filterObj){
+                if(filterObj.hasOwnProperty(key)){
+
+                    let temp = []
                 
-            }
-            this.filters.forEach(fl =>{
+                    if(key === 'radius'){
+                        temp = this.filterFab.filter(copy, {param: key, value: filterObj[key]}, this.userCoords)
+                    } else {
+                        temp = this.filterFab.filter(copy, {param: key, value: filterObj[key]})
+                    }
 
-                if(fl.param === 'radius'){
-                    let temp = this.filterObj.filter(copy, fl, this.userCoords)
+                    console.log(temp)
+
+                    res = [...temp]
+                    copy = temp
                 }
-                let temp = this.filterObj.filter(copy, fl)
+            }
 
-                res = [...temp]
-                copy = temp
-            })
             return res
         }
     }
 }
 </script>
 <style >
+    .wrapper{
+        position: relative;
+        width: 800px;
+        margin: auto;
+    }
 
 </style>
 
