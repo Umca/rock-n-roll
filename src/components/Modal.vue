@@ -291,8 +291,6 @@ export default {
     padding: 2px 16px;
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQIW2M8cnjffxtbJ0YGKAAzkAXhMjBBuABMJQAWEA9J3TkpgAAAAABJRU5ErkJggg==);
     color: black;
-    position: sticky;
-    top: -1px;
 }
 .popup-main {
     padding: 2px 16px;

@@ -25,101 +25,101 @@ export default {
             modalOpened: false,
             filtersOpened: false,
             markers: [
-                {
-                    index: 1,
-                    position: {
-                        lat: 50.451904988707426,
-                        lng: 30.365139904949842
-                    },
-                    icon: 'https://imageshack.com/a/img924/7901/R6u2Bq.png',
-                    info: {
-                        found: false,
-                        photo: "https://i.imgur.com/Qha68YE.jpg",
-                        animal: 'cat',
-                        color: '#2d292b',
-                        age: 1,
-                        breed: "home",
-                        name: "olya",
-                        nickname: 'Black',
-                        email: "fhkfjhf@jfjk"
-                    }
-                },
-                {
-                    index: 2,
-                    position: {
-                        lat: 50.46982699187444,
-                        lng: 30.366856518719374
-                    },
-                    icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
-                    info: {
-                        found: true,
-                        photo: "https://i.imgur.com/oaHmbG7.jpg",
-                        animal: 'dog',
-                        color: '#191216',
-                        age: 1,
-                        breed: "home",
-                        name: "olya",
-                        nickname: 'zaya',
-                        email: "fhkfjhf@jfjk"
-                    }
-                },
-                {
-                    index: 3,
-                    position: {
-                        lat: 50.43259536449169,
-                        lng: 30.35317987194628
-                    },
-                    icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
-                    info: {
-                        found: true,
-                        photo: "https://i.imgur.com/oaHmbG7.jpg",
-                        animal: 'dog',
-                        color: '#bf2f81',
-                        age: 1,
-                        breed: "home",
-                        name: "olya",
-                        nickname: '',
-                        email: "fhkfjhf@jfjk"
-                    }
-                },
-                {
-                    index: 4,
-                    position: {
-                        lat: 50.42160419408208,
-                        lng: 30.274702976143203
-                    },
-                    icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
-                    info: {
-                        found: true,
-                        photo: "https://i.imgur.com/oaHmbG7.jpg",
-                        animal: 'cat',
-                        color: 'black',
-                        age: 1,
-                        breed: "home",
-                        name: "olya",
-                        nickname: '',
-                        email: "fhkfjhf@jfjk"
-                    }
-                },
-                {
-                    index: 5,
-                    position: {
-                        lat: 50.5418,
-                        lng: 30.4121
-                    },
-                    icon: 'https://imageshack.com/a/img924/7901/R6u2Bq.png',
-                    info: {
-                        found: false,
-                        photo: "https://i.imgur.com/oaHmbG7.jpg",
-                        animal: 'dog',
-                        color: 'black',
-                        age: 1,
-                        breed: "barbet",
-                        name: "olya",
-                        nickname: 'smith',
-                        email: "fhkfjhf@jfjk"
-                    }
-                }
+                // {
+                //     index: 1,
+                //     position: {
+                //         lat: 50.451904988707426,
+                //         lng: 30.365139904949842
+                //     },
+                //     icon: 'https://imageshack.com/a/img924/7901/R6u2Bq.png',
+                //     info: {
+                //         found: false,
+                //         photo: "https://i.imgur.com/Qha68YE.jpg",
+                //         animal: 'cat',
+                //         color: '#2d292b',
+                //         age: 1,
+                //         breed: "home",
+                //         name: "olya",
+                //         nickname: 'Black',
+                //         email: "fhkfjhf@jfjk"
+                //     }
+                // },
+                // {
+                //     index: 2,
+                //     position: {
+                //         lat: 50.46982699187444,
+                //         lng: 30.366856518719374
+                //     },
+                //     icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
+                //     info: {
+                //         found: true,
+                //         photo: "https://i.imgur.com/oaHmbG7.jpg",
+                //         animal: 'dog',
+                //         color: '#191216',
+                //         age: 1,
+                //         breed: "home",
+                //         name: "olya",
+                //         nickname: 'zaya',
+                //         email: "fhkfjhf@jfjk"
+                //     }
+                // },
+                // {
+                //     index: 3,
+                //     position: {
+                //         lat: 50.43259536449169,
+                //         lng: 30.35317987194628
+                //     },
+                //     icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
+                //     info: {
+                //         found: true,
+                //         photo: "https://i.imgur.com/oaHmbG7.jpg",
+                //         animal: 'dog',
+                //         color: '#bf2f81',
+                //         age: 1,
+                //         breed: "home",
+                //         name: "olya",
+                //         nickname: '',
+                //         email: "fhkfjhf@jfjk"
+                //     }
+                // },
+                // {
+                //     index: 4,
+                //     position: {
+                //         lat: 50.42160419408208,
+                //         lng: 30.274702976143203
+                //     },
+                //     icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
+                //     info: {
+                //         found: true,
+                //         photo: "https://i.imgur.com/oaHmbG7.jpg",
+                //         animal: 'cat',
+                //         color: 'black',
+                //         age: 1,
+                //         breed: "home",
+                //         name: "olya",
+                //         nickname: '',
+                //         email: "fhkfjhf@jfjk"
+                //     }
+                // },
+                // {
+                //     index: 5,
+                //     position: {
+                //         lat: 50.5418,
+                //         lng: 30.4121
+                //     },
+                //     icon: 'https://imageshack.com/a/img924/7901/R6u2Bq.png',
+                //     info: {
+                //         found: false,
+                //         photo: "https://i.imgur.com/oaHmbG7.jpg",
+                //         animal: 'dog',
+                //         color: 'black',
+                //         age: 1,
+                //         breed: "barbet",
+                //         name: "olya",
+                //         nickname: 'smith',
+                //         email: "fhkfjhf@jfjk"
+                //     }
+                // }
             ],
 
             canAddNewMarkers: false,
@@ -141,11 +141,14 @@ export default {
     },
 
     watch: {
-
         markers(oldValue, newValue) {
+            console.log('from watch', newValue)
             this.filtered = newValue
         }
+    },
 
+    created(){
+        this.getFromLocalStorage()
     },
 
     mounted(){
@@ -165,7 +168,8 @@ export default {
 
             this.closeModal()
             this.addNewMarker(ev.result)
-            
+
+            this.putToLocalStorage()
         })
 
         EventBus.$on('new_markers_mode', () => this.toggleAddMarkersMode())
@@ -181,8 +185,10 @@ export default {
     },
 
     beforeUpdate(){
-        if(!this.filtersOpened ) document.querySelector('.controlUIImg').style.backgroundImage = "url(https://cdn.icon-icons.com/icons2/621/PNG/128/magnifier-tool_icon-icons.com_56918.png)" 
+        if(document.querySelector('.controlUIImg')){
+            if(!this.filtersOpened ) document.querySelector('.controlUIImg').style.backgroundImage = "url(https://cdn.icon-icons.com/icons2/621/PNG/128/magnifier-tool_icon-icons.com_56918.png)" 
             if(this.filtersOpened) document.querySelector('.controlUIImg').style.backgroundImage = "url(https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/cross-24-512.png)"
+        }
     },
 
     methods: {
@@ -195,10 +201,7 @@ export default {
         },
 
         toggleFilters(){
-            
             this.filtersOpened = !this.filtersOpened
-            // this.$forceUpdate();
-
         },
 
         toggleAddMarkersMode(){
@@ -237,6 +240,22 @@ export default {
             }
 
             return res
+        },
+
+        putToLocalStorage(){
+            let t = localStorage.getItem('markers')
+            if(t){
+                localStorage.removeItem('markers')
+            }
+            localStorage.setItem('markers', JSON.stringify(this.markers))
+        },
+
+        getFromLocalStorage(){
+            let t = localStorage.getItem('markers')
+            if(t){
+                this.markers = JSON.parse(t)
+                console.log('from get', this.markers)
+            }
         }
     }
 }
