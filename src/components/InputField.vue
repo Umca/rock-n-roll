@@ -96,7 +96,7 @@ input{
     border-bottom: 1px solid #c2c2c2;
     padding: 7px 0;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.3s;
     width: 100%;
 }
 input:focus{

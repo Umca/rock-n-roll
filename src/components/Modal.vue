@@ -244,7 +244,7 @@ export default {
             this.tel = ''
             this.photo = ''
             this.found= false
-            this.nickname = nickname
+            this.nickname = ""
         },
 
         invalideMsg(ev){
@@ -258,11 +258,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .popup {
     display: block;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     padding-top: 100px;
     left: 0;
     top: 0;
@@ -306,13 +306,13 @@ export default {
     justify-content: space-between;
     margin-bottom: 20px;
 }
-.popup-form form label{
+label{
     display: flex;
     justify-content: space-between;
     margin: 0px 0px 15px 0px;
 }
 
-.popup-form select{
+select{
     width: 100%; 
     border: none;
     border-bottom: 1px solid #ccc;
@@ -320,11 +320,11 @@ export default {
     box-shadow: none;
     padding: 7px 0;
 }
-.popup-form select:focus{
+select:focus{
     outline: none;
     border-bottom-color: rgb(113, 166, 252);
 }
-.popup-form select option::selected{
+select option::selected{
     color: black;
     text-transform: capitalize;
 }
@@ -361,63 +361,63 @@ label > span{
     content: ' *';
     color: #FF8500;
 }
-.popup-form input[type=color]{
+input[type=color]{
     padding: 0;
     height: 30px;
     width: 30px;
     border: none;
     background-color: white;
 }
-.popup-form .status-container{
+.status-container{
     position: relative;
 }
 
-.popup-form .status-container .status{
+.status-container .status{
     padding-top: 6px;
 }
 
-.popup-form .status-container input{
+.status-container input{
     display: none;
 }
-.popup-form .status-container .status{
+.status-container .status{
     position: relative;
     width: 45px;
     padding: 0;
     margin-bottom: 0;
 }
-.popup-form .status-container .status::before,
-.popup-form .status-container .status::after{
+.status-container .status::before,
+.status-container .status::after{
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
     margin: auto;
 }
-.popup-form .status-container span.status:hover {
+.status-container span.status:hover {
     cursor: pointer;
 }
-.popup-form .status-container span.status:before{
+.status-container span.status:before{
     width: 45px;
     left: 0;
     height: 25px;
     background-color: #ccc;
     border-radius: 50px;
 }
-.popup-form .status-container span.status:after{
+.status-container span.status:after{
     /* left: 201px; */
     left: 5px;
     width: 17px;
     height: 17px;
     border-radius: 10px;
     background-color: #fff;
-    transition: left .25s, background-color .25s;
+    transition: left .3s, background-color .3s;
 }
-.popup-form .status-container  input[type="checkbox"]:checked + label span.status::after{
+.status-container  input[type="checkbox"]:checked + label span.status::after{
     left: 23px;
     background-color: #FF8500;
 }
 
-.popup-form .status-container .status + label{
+.status-container .status + label{
     margin-bottom: 10px;
 }
 
@@ -493,14 +493,12 @@ label > span{
     font-size: 14px;
     line-height: 21px;
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQIW2M8cnjffxtbJ0YGKAAzkAXhMjBBuABMJQAWEA9J3TkpgAAAAABJRU5ErkJggg==);
-    
 }
 
 .popup-foot p {
     margin: 0;
 }
 
-/* add animation effects */
 @-webkit-keyframes animatetop {
     from {top:-300px; opacity:0}
     to {top:0; opacity:1}

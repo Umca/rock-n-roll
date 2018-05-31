@@ -5,7 +5,7 @@
             :center="center"
             :options="options"
             style="width: 800px;
-                height: 600px;
+                height: 670px;
                 margin: 0 auto;
                 background: gray;"  
             @click='emitToOpenModal'
@@ -66,7 +66,26 @@ export default {
 
     mounted(){
         this.$refs.mapRef.$mapPromise.then((map) => {
-            map.controls[google.maps.ControlPosition.TOP_CENTER].push(this.createCustomControl());
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(this.createCustomControl(
+                'Click to enable map editing',
+                'Add marker',
+                function() {
+                    console.log(this.children)
+                    this.children[0].innerHTML = "Cancel this mode"
+                    EventBus.$emit('new_markers_mode')
+                    document.querySelector(".gm-style:first-of-type > div:nth-child(1)").style.cursor = "crosshair"
+                }
+            ));
+
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.createCustomControl(
+                'Click to open filters',
+                'Filters',
+                function() {
+                    EventBus.$emit('filters_toggle')
+                    document.querySelector('.controlUIImg').style.backgroundImage = "url(https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/cross-24-512.png)"
+                },
+                true
+            ));
         })
         this.geolocate()
     },
@@ -96,24 +115,24 @@ export default {
             })
         },
 
-        createCustomControl(){
+        createCustomControl(title, text, cb, noText = false){
             let controlDiv = document.createElement('div')
 
             let controlUI = document.createElement('div');
-            controlUI.classList.add('control-ui')
-            controlUI.title = 'Click to add marker';
+            controlUI.classList.add('controlUI')
+            controlUI.title = title;
             controlDiv.appendChild(controlUI);
 
-            let controlText = document.createElement('div');
-            controlText.id = "controlText"
-            controlText.innerHTML = 'Enable marker adding';
-            controlUI.appendChild(controlText);
-
-            controlUI.addEventListener('click', function() {
-                this.children[0].innerHTML = "Cancel this mode"
-                EventBus.$emit('new_markers_mode')
-                document.querySelector(".gm-style:first-of-type > div:nth-child(1)").style.cursor = "crosshair"
-            });
+            if(noText){
+                controlUI.classList.add('controlUIImg')
+            } else {
+                controlUI.classList.add('controlUIText')
+                let controlText = document.createElement('div');
+                controlText.innerHTML = text;
+                controlUI.appendChild(controlText);
+            }
+            
+            controlUI.addEventListener('click', cb);
 
             return controlDiv
 
@@ -129,11 +148,11 @@ export default {
                 })
                 this.cancelMarkersAdding()
             }
-            
         },
 
         cancelMarkersAdding(e){
-            document.getElementById('controlText').innerHTML = "Enable marker adding"
+            console.log(document.querySelector('.controlUIText'))
+            document.querySelector('.controlUIText').children[0].innerHTML = "Add marker"
             document.querySelector(".gm-style:first-of-type > div:nth-child(1)").style.cursor = 'url("https://maps.gstatic.com/mapfiles/openhand_8_8.cur"), default'
             EventBus.$emit('new_markers_mode')
         },
@@ -223,21 +242,37 @@ export default {
     margin: 0;
 }
 
-#controlText{
-    color: rgb(25,25,25);
-    font-family: 'Lato, Arial, sans-serif';
-    font-size: 16px;
-    line-height: 38px;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.control-ui{
+.controlUI{
     background:#fff;
     border: 2px solid #fff;
     cursor: pointer;
-    margin-bottom: 22px;
     text-align: center;
+    border-radius: 3px;
+    -webkit-box-shadow: 2px 0px 8px 0px rgba(167, 167, 167, 0.75);
+    -moz-box-shadow:    2px 0px 8px 0px rgba(167, 167, 167, 0.75);
+    box-shadow:         2px 0px 8px 0px rgba(167, 167, 167, 0.75);
+}
+
+.controlUIImg{
+    background: white url(https://cdn.icon-icons.com/icons2/621/PNG/128/magnifier-tool_icon-icons.com_56918.png) no-repeat;
+    background-size: 20px;
+    background-position: 50% 50%;
+    padding: 20px 45px;
+}
+
+.controlUIText{
+    font-family: 'Lato', 'Arial', sans-serif;
+    padding: 10px 7px;
+    font-size: 20px;
+}
+
+.vue-map-container .vue-map{
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: 999;
 }
 </style>
 
