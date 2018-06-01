@@ -24,12 +24,14 @@
                 title="You are here"
 
             ></gmap-marker>
-            <gmap-info-window 
+            <gmap-info-window
+                @domready="restyle"
+                ref="infoWindowRef" 
                 :maxWidth = "300"
                 :options="infoOptions" 
                 :position="infoWindowPos" 
                 :opened="infoWinOpen" 
-                @closeclick="infoWinOpen=false"
+                @closeclick="infoWinOpen = false"
             >
             <div v-html="infoWindowTemplate"></div>
             </gmap-info-window>
@@ -38,6 +40,7 @@
 </template>
 <script>
 import { EventBus }  from '../utils/eventBus.js'
+import { gmapApi  } from 'vue2-google-maps'
 
 export default {
     props: ['markers', 'canAddNewMarkers'],
@@ -61,7 +64,13 @@ export default {
                     height: -35
                 }
             },
+            clickedMarker: undefined,
+            infoToEdit: undefined
         }
+    },
+
+    computed: {
+        google: gmapApi
     },
 
     mounted(){
@@ -156,32 +165,51 @@ export default {
         },
 
         toggleInfoWindow (m) {
-            this.infoWindowPos = m.position;
+            this.infoWindowPos = m.position
+
+            this.clickedMarker = m
 
 
             this.infoWindowTemplate = `
             <div class="info-content">
-                <div class="info-head">
-                    <h2>This cute is ${m.info.found}</h2>
-                </div>
-                <div class="info-main">
-                    <div class="info-main__photo">
-                        <img alt="cute" src=${m.info.photo} />
+                <div class="info-animal-card">
+                    <div class="info-animal-card__photo">
+                        <img alt='cute' src=${m.info.photo}/>
                     </div>
-                    <div class="info-main__info">
-                        <ul>
-                            <li>It is the loveliest ${m.info.animal} you have ever seen.</li>
-                            <li>${m.info.breed}</li>
-                            <li>${m.info.age} year</li>
-                            <li>${m.info.color}</li>
-                        </ul>
-                        <p>Its parents are waiting for it. If you have some information, please, contact <span>${m.info.name}</span>: <span>${m.info.tel}</span></p>
+                    <div class="info-animal-card__info">
+                        <div class="string">
+                            <div>Nickname: </div>
+                            <div>${m.info.nickname}</div>
+                        </div>
+                        <div class="string">
+                            <div>Breed: </div>
+                            <div>${m.info.breed}</div>
+                        </div>
+                        <div class="string">
+                            <div>Age: </div>
+                            <div>${m.info.age} year</div>
+                        </div>
+                        <div class="string">
+                            <div>Color: </div>
+                            <div style="background: ${m.info.color}; content:''; width: 13px; height:13px"></div>
+                        </div>
                     </div>
                 </div>
-                <div class='info-foot'>
-                    <p>Contact us if you want to help.</p>
-                    <p>E-mail: qwerty@gmail.com</p>
-                    <p>Tel.: 044 765 999 17</p>
+                <div class="info-other">
+                    <div class='info-head'>
+                        <h2>This cute is ${m.info.found ? 'FOUND' : 'LOST'}</h2>
+                    </div>
+                    <div class="info-main">
+                        <p>${!m.info.found ? 'Its parents are waiting for it. If you have some information, please, contact:' : 'Contact me , if you are looking for this cute.' } <br><br><span><b>Name:</b> ${m.info.name}</span><br> <span><b>Tel.:</b> ${m.info.tel}</span> <br>
+                         <span>${m.info.email ?  '<b>Email:</b> ' + m.info.email : ""}</span>
+                        </p>
+                        <button class="info-edit" onclick=${this.editInfo}>Edit</button>
+                    </div>
+                    <div class='info-foot'>
+                        <p>Contact us if you want to help.</p>
+                        <p>E-mail: qwerty@gmail.com</p>
+                        <p>Tel.: 044 765 999 17</p>
+                    </div>
                 </div>
             </div>
             `;
@@ -192,7 +220,32 @@ export default {
               this.infoWinOpen = true;
               this.currentMidx = m.index;
             }
-          },
+        },
+        restyle(){
+            let iwOuter = document.querySelector('.gm-style-iw')
+            var iwBackground = iwOuter.previousSibling
+            iwBackground.querySelector(':nth-child(2)').style.display = 'none'
+            iwBackground.querySelector(':nth-child(4)').style.display = 'none'
+
+            let iwCloseBtn = iwOuter.nextSibling;
+            iwCloseBtn.style.right = '60px'
+
+            let btn = document.querySelector('.info-edit')
+            if(!btn.hasListener){
+                    btn.addEventListener('click', (e) => {
+                    e.target.hasListener = true
+                    this.edit()
+                })
+            }
+            
+
+        },
+
+        edit(m){
+            this.infoWinOpen = false
+            EventBus.$emit('marker_edit', this.clickedMarker)
+            this.clickedMarker = undefined
+        },
     }
 }
 </script>
@@ -205,39 +258,97 @@ export default {
     padding: 0;
     width: 100%;
     font-family: 'Lato', sans-serif;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-template-rows: 100%;
+}
+.info-animal-card{
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.info-animal-card__info{
+    padding: 10px;
+}
+
+.info-animal-card .string{
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    padding: 3px 0;
+    align-items: center;
+}
+
+.info-animal-card__color{
+     width: 12px; 
+     height:12px; 
+     content:"";
+     position: absolute;
+}
+
+.info-animal-card__photo img{
+    width: 100%;
+    height: auto;
+    
+}
+
+.info-other{
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 65px auto 80px;
 }
 
 .info-head {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-start: 1;
     padding: 2px 16px;
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQIW2M8cnjffxtbJ0YGKAAzkAXhMjBBuABMJQAWEA9J3TkpgAAAAABJRU5ErkJggg==);
     color: black;
 }
 .info-main {
-    padding: 2px 16px;
-    display: grid;
-    grid-template-rows: 100%;
-    grid-template-columns: 40% 60%;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 1;
+    grid-column-start: 1;
+    padding: 5px 16px 20px 16px;
 }
-.info-main__photo{
-    display: flex;
-    justify-items: center;
-    align-items: center;
+
+.info-main p{
+    line-height: 20px;
 }
-.info-main__photo img{
-    width: 50%;
-    height: auto;
+
+.info-main .info-edit{
+    border: none;
+    padding: 8px 15px 8px 15px;
+    background: #FF8500;
+    color: #fff;
+    font-size: 16px;
+    box-shadow: 1px 1px 4px #DADADA;
+    -moz-box-shadow: 1px 1px 4px #DADADA;
+    -webkit-box-shadow: 1px 1px 4px #DADADA;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    float: right;
+    cursor: pointer;
 }
-.info-main__info{
-    padding: 7px 12px;
-}
+
 .info-foot {
-    padding: 2px 16px;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    grid-column-start: 1;
+    grid-column-start: 1;
+    padding: 15px 16px;
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQIW2M8cnjffxtbJ0YGKAAzkAXhMjBBuABMJQAWEA9J3TkpgAAAAABJRU5ErkJggg==);
-    color: blck;
+    color: black;
 }
 
 .info-foot p {
     margin: 0;
+    line-height: 16px;
 }
 
 .controlUI{
@@ -271,6 +382,19 @@ export default {
     bottom: 0;
     position: absolute;
     z-index: 999;
+}
+
+/* infoWindow styles */
+.gm-style-iw {
+   width: 450px !important;
+   top: 0 !important;
+   left: 0 !important;
+   border-radius: 2px 2px 0 0;
+}
+.infoClose{
+    opacity: 1;
+    right: 38px;
+    top: 3px;
 }
 </style>
 
