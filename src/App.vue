@@ -2,7 +2,7 @@
     <div class="wrapper">
         <filter-component :isShown = 'filtersOpened'></filter-component>
         <google-map :markers='filtered' :canAddNewMarkers="canAddNewMarkers"></google-map>
-        <modal-window :isShown = 'modalOpened'></modal-window>
+        <modal-window :isShown = 'modalOpened' :info="infoToEdit"></modal-window>
     </div>
 </template>
 
@@ -130,7 +130,9 @@ export default {
 
             filtered: [],
 
-            userCoords: {}
+            userCoords: {},
+
+            infoToEdit: undefined
         }
     },
 
@@ -141,8 +143,7 @@ export default {
     },
 
     watch: {
-        markers(oldValue, newValue) {
-            console.log('from watch', newValue)
+        markers(newValue, oldValue) {
             this.filtered = newValue
         }
     },
@@ -181,6 +182,11 @@ export default {
             this.userCoords.lng = 30.352864900000004
 
             this.filtered = this.filterFn(this.markers, ev)
+        })
+
+        EventBus.$on('marker_edit', (ev) => {
+            this.infoToEdit =  ev
+            this.openModal()
         })
     },
 
@@ -253,8 +259,7 @@ export default {
         getFromLocalStorage(){
             let t = localStorage.getItem('markers')
             if(t){
-                this.markers = JSON.parse(t)
-                console.log('from get', this.markers)
+                this.markers = [...JSON.parse(t)]
             }
         }
     }

@@ -113,7 +113,7 @@
                                 value="Save" 
                                 />
                             </label>
-                            <label class="popup-delete">Delete
+                            <label class="popup-delete" v-show="info">Delete
                                 <input type="checkbox" name="toDelete" v-model='toDelete'/>
                                 <span class="checkmark"></span>
                             </label>
@@ -184,6 +184,20 @@ export default {
             if(!select.children[i].dataset.hasOwnProperty('default')){
                 select.children[i].style.color= 'black'
             }
+        }
+        let self = this
+        if(this.info){
+            Object.keys(this.info.info).forEach( key => {
+                if(key === 'breed'){
+                    this.chosenBreed = this.info.info.breed
+                }
+                if(key === 'animal'){
+                    this.animal = this.info.info.animal.slice(0, 1) + this.info.info.animal.slice(1)
+                    this.breed = this.types[this.animal]
+                }
+                this[key] = this.info.info[key]
+            })
+
         }
     },
 
