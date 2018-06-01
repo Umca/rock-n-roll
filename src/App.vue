@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="position: relative">
         <filter-component :isShown = 'filtersOpened'></filter-component>
         <google-map :markers='filtered' :canAddNewMarkers="canAddNewMarkers"></google-map>
         <modal-window :isShown = 'modalOpened' :info="infoToEdit"></modal-window>
@@ -8,7 +8,6 @@
 
 <script>
 
-import { EventBus }  from './utils/eventBus'
 import Map from './components/Map'
 import Modal from './components/Modal'
 import Filters from './components/Filters'
@@ -158,14 +157,14 @@ export default {
 
         this.filterFab = new Filter()
 
-        EventBus.$on('modal_opened', (ev) => {
+        this.$on('modal_opened', (ev) => {
             this.newMarker.position = ev.position
             this.openModal()
         })
 
-        EventBus.$on('modal_closed', () => this.closeModal())
+        this.$on('modal_closed', () => this.closeModal())
 
-        EventBus.$on('new_marker', (ev) => {
+        this.$on('new_marker', (ev) => {
 
             this.closeModal()
             this.addNewMarker(ev.result)
@@ -173,18 +172,18 @@ export default {
             this.putToLocalStorage()
         })
 
-        EventBus.$on('new_markers_mode', () => this.toggleAddMarkersMode())
+        this.$on('new_markers_mode', () => this.toggleAddMarkersMode())
 
-        EventBus.$on('filters_toggle', () => this.toggleFilters())
+        this.$on('filters_toggle', () => this.toggleFilters())
 
-        EventBus.$on('filter_apply', (ev) => {
+        this.$on('filter_apply', (ev) => {
             this.userCoords.lat = 50.4514007
             this.userCoords.lng = 30.352864900000004
 
             this.filtered = this.filterFn(this.markers, ev)
         })
 
-        EventBus.$on('marker_edit', (ev) => {
+        this.$on('marker_edit', (ev) => {
             this.infoToEdit =  ev
             this.openModal()
         })

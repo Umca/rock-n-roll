@@ -88,7 +88,6 @@
 <script>
 import BreedSelect from './BreedSelect'
 import InputField from './InputField'
-import { EventBus } from '../utils/eventBus'
 import Radio from './Radio'
 import { cats, dogs, birds } from '../utils/data'
 
@@ -119,7 +118,7 @@ export default {
             }
         }
 
-            EventBus.$emit('filter_apply', appliedFilters)
+            this.$parent.$emit('filter_apply', appliedFilters)
         }
         
     },
@@ -189,15 +188,15 @@ export default {
         width: 250px;
         position: absolute;
         z-index: 1;
-        top: 8;
-        left: 295;
+        top: 0;
+        left: 285;
         border: 1px solid #ccc;
         opacity: 1;
         transition:  left 0.3s ;
         font-family: 'Lato', 'Arial', sans-serif;
     }
     .active{
-        left: 39px;
+        left: 28px;
     }
     .filters{
         padding: 10px 1em;

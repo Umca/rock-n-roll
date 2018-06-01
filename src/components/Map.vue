@@ -39,7 +39,6 @@
     </div>
 </template>
 <script>
-import { EventBus }  from '../utils/eventBus.js'
 import { gmapApi  } from 'vue2-google-maps'
 
 export default {
@@ -74,13 +73,14 @@ export default {
     },
 
     mounted(){
+        const self = this
         this.$refs.mapRef.$mapPromise.then((map) => {
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(this.createCustomControl(
                 'Click to enable map editing',
                 'Add marker',
                 function() {
                     this.children[0].innerHTML = "Cancel this mode"
-                    EventBus.$emit('new_markers_mode')
+                    self.$parent.$emit('new_markers_mode')
                     document.querySelector(".gm-style:first-of-type > div:nth-child(1)").style.cursor = "crosshair"
                 }
             ));
@@ -89,7 +89,7 @@ export default {
                 'Click to open filters',
                 'Filters',
                 function() {
-                    EventBus.$emit('filters_toggle')
+                    self.$parent.$emit('filters_toggle')
                     document.querySelector('.controlUIImg').style.backgroundImage = "url(https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/cross-24-512.png)"
                 },
                 true
@@ -106,7 +106,7 @@ export default {
                     this.center.lat = position.coords.latitude
                     this.center.lng = position.coords.longitude
 
-                    EventBus.$emit('user_position', this.center)
+                    this.$parent.$emit('user_position', this.center)
 
                 } catch(e) {
                     alert('We can not get your coords!')
@@ -148,7 +148,7 @@ export default {
 
         emitToOpenModal(e){
             if(this.canAddNewMarkers){
-                EventBus.$emit('modal_opened', {
+                this.$parent.$emit('modal_opened', {
                     position: {
                         lat: e.latLng.lat(),
                         lng: e.latLng.lng(),
@@ -161,7 +161,7 @@ export default {
         cancelMarkersAdding(e){
             document.querySelector('.controlUIText').children[0].innerHTML = "Add marker"
             document.querySelector(".gm-style:first-of-type > div:nth-child(1)").style.cursor = 'url("https://maps.gstatic.com/mapfiles/openhand_8_8.cur"), default'
-            EventBus.$emit('new_markers_mode')
+            this.$parent.$emit('new_markers_mode')
         },
 
         toggleInfoWindow (m) {
@@ -179,7 +179,7 @@ export default {
                     <div class="info-animal-card__info">
                         <div class="string">
                             <div>Nickname: </div>
-                            <div>${m.info.nickname}</div>
+                            <div>${m.info.nickname ? m.info.nickname : ""}</div>
                         </div>
                         <div class="string">
                             <div>Breed: </div>
@@ -243,7 +243,7 @@ export default {
 
         edit(m){
             this.infoWinOpen = false
-            EventBus.$emit('marker_edit', this.clickedMarker)
+            this.$parent.$emit('marker_edit', this.clickedMarker)
             this.clickedMarker = undefined
         },
     }

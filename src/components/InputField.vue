@@ -106,10 +106,20 @@ input:focus{
 }
 input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; }
-/* input.input-field::-moz-placeholder,
-input.input-field::-webkit-input-placeholder,
-input.input-field::-ms-input-placeholder */
+
 input::placeholder{
+    color: #ccc;
+    text-transform: capitalize;
+}
+input.input-field::-moz-placeholder{
+    color: #ccc;
+    text-transform: capitalize;
+}
+input.input-field::-webkit-input-placeholder{
+    color: #ccc;
+    text-transform: capitalize;
+}
+input.input-field::-ms-input-placeholder{
     color: #ccc;
     text-transform: capitalize;
 }

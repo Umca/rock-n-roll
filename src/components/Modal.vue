@@ -130,7 +130,6 @@
 </div>
 </template>
 <script>
-import { EventBus } from '../utils/eventBus'
 import BreedSelect from './BreedSelect'
 import InputField from './InputField'
 import { cats, dogs, birds } from '../utils/data'
@@ -203,7 +202,7 @@ export default {
 
     methods: {
         close(){
-            EventBus.$emit('modal_closed')
+            this.$parent.$emit('modal_closed')
             this.cleanState()
         },
 
@@ -241,7 +240,7 @@ export default {
             result.photo = this.photo
             result.nickname = this.nickname
 
-            EventBus.$emit('new_marker', {
+            this.$parent.$emit('new_marker', {
                     result
                 })
             this.cleanState()

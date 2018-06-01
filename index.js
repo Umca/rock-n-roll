@@ -22,7 +22,7 @@ Vue.use(VueGoogleMaps, {
 // }
 
 var app = new Vue({
-    el: '#app',
+    el: '#app1',
     render: h => h(App)
   })
 
