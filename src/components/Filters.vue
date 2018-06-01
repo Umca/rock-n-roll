@@ -185,20 +185,19 @@ export default {
 </script>
 <style>
     .filters_wrapper{
-        height: 670px;
+        height: 668px;
         width: 250px;
         position: absolute;
         z-index: 1;
-        top: 0;
-        left: 0;
+        top: 8;
+        left: 295;
         border: 1px solid #ccc;
-        opacity: 0;
-        transition: opacity 0.5 left 0.3s ;
+        opacity: 1;
+        transition:  left 0.3s ;
         font-family: 'Lato', 'Arial', sans-serif;
     }
     .active{
-        left: -260px;
-        opacity: 1;
+        left: 39px;
     }
     .filters{
         padding: 10px 1em;

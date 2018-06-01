@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div>
         <filter-component :isShown = 'filtersOpened'></filter-component>
         <google-map :markers='filtered' :canAddNewMarkers="canAddNewMarkers"></google-map>
         <modal-window :isShown = 'modalOpened' :info="infoToEdit"></modal-window>
@@ -266,11 +266,6 @@ export default {
 }
 </script>
 <style >
-    .wrapper{
-        position: relative;
-        width: 800px;
-        margin: auto;
-    }
 
 </style>
 
