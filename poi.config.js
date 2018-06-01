@@ -3,5 +3,6 @@ module.exports = (options, req) => ({
         minimize: true,
         vendor: true
     },
-    port: 6547
+    port: 6547,
+    cleanOutDir: true
 })
