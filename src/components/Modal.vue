@@ -17,9 +17,10 @@
                                         name="animal" 
                                         class="select-field"
                                         @change="handleAnimal"
+                                        :value="animal"
                                         
                                     >
-                                        <option disabled selected class="disabled"> Choose animal</option>
+                                        <option disabled selected class="disabled" value=""> Choose animal</option>
                                         <option value="cat">Cat</option>
                                         <option value="dog">Dog</option>
                                         <option value="bird">Bird</option>
@@ -144,9 +145,8 @@ export default {
                 birds
             },
             options: ['cat', 'dog', 'bird'],
-            breed: [],
             chosenBreed:'',
-            animal: 'Cat',
+            animal: '',
             color: "#f210f8",
             age: '',
             name: '',
@@ -155,6 +155,8 @@ export default {
             photo: '',
             nickname:'',
             found: false,
+
+            filteredBr: [],
 
             toDelete: false
         }
@@ -167,7 +169,21 @@ export default {
             } else {
                 return 'Lost'
             }
+        },
+        breed(){
+            if(this.animal && (this.filteredBr.length  == 0)){
+                return this.types[`${this.animal.toLowerCase()}s`]
+            } else {
+                if(this.filteredBr.length === 0) return []
+                if(this.filteredBr.length > 0){
+                    return this.filteredBr
+                } else {
+                    return this.types[`${this.animal.toLowerCase()}s`]
+                }
+            }
+
         }
+
     },
 
     props: ['isShown', 'info'],
@@ -175,6 +191,11 @@ export default {
     components: {
         'breed-select': BreedSelect,
         'input-field':InputField
+    },
+
+    afterUpdate(){
+        debugger
+        console.log(this)
     },
 
     mounted(){
@@ -191,8 +212,8 @@ export default {
                     this.chosenBreed = this.info.info.breed
                 }
                 if(key === 'animal'){
-                    this.animal = this.info.info.animal.slice(0, 1) + this.info.info.animal.slice(1)
-                    this.breed = this.types[this.animal]
+                    // this.animal = this.info.info.animal.slice(0, 1) + this.info.info.animal.slice(1)
+                    // this.breed = this.types[this.animal]
                 }
                 this[key] = this.info.info[key]
             })
@@ -207,19 +228,19 @@ export default {
         },
 
         handleAnimal(e){
+            debugger
             this.animal = e.target.value
-            this.breed = this.types[`${e.target.value.toLowerCase()}s`]
             this.chosenBreed =""
         },
 
         filterBreeds(ev){
             this.chosenBreed = ev.target.value
-            let temp = this.types[`${this.animal.toLowerCase()}s`].filter(e => e.toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1)
-            if(temp.length > 0){
-                this.breed = temp
-            } else {
-                this.breed = this.types[`${this.animal.toLowerCase()}s`]
-            }
+            this.filteredBr = this.types[`${this.animal.toLowerCase()}s`].filter(e => e.toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1)
+            // if(temp.length > 0){
+            //     this.breed = temp
+            // } else {
+            //     // this.breed = this.types[`${this.animal.toLowerCase()}s`]
+            // }
         },
 
         handleOption(val){
@@ -247,9 +268,8 @@ export default {
         },
 
         cleanState(){
-            this.breed = []
             this.chosenBreed = ''
-            this.animal = 'Cat'
+            this.animal = ''
             this.color = "#f210f8"
             this.age = ''
             this.name = ''
@@ -258,6 +278,7 @@ export default {
             this.photo = ''
             this.found= false
             this.nickname = ""
+            this.filteredBr = []
         },
 
         invalideMsg(ev){
