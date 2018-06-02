@@ -1,8 +1,16 @@
 <template>
-    <div style="position: relative">
+    <div style="position: relative; width: 800px; margin: auto; ">
         <filter-component :isShown = 'filtersOpened'></filter-component>
-        <google-map :markers='filtered' :canAddNewMarkers="canAddNewMarkers"></google-map>
-        <modal-window :isShown = 'modalOpened' :info="infoToEdit"></modal-window>
+        <google-map :markers='filtered' :canAddNewMarkers="canAddNewMarkers" :statusText="statusText"></google-map>
+        <modal-window 
+            :isShown = 'modalOpened' 
+            :info="infoToEdit" 
+            :markerInfo='markerInfo' 
+            :breeds="breeds"
+            :filterBreeds="filterBreeds"
+            :handleBreedOption="handleBreedOption"
+            :mode="mode"
+        ></modal-window>
     </div>
 </template>
 
@@ -12,11 +20,12 @@ import Map from './components/Map'
 import Modal from './components/Modal'
 import Filters from './components/Filters'
 import { Filter } from './utils/filter'
+import { cats, dogs, birds } from './utils/data'
 
 export default {
     data(){
         return {
-            indexCounter: 5,
+            indexCounter: 6,
             icons: {
                 lost: 'https://imageshack.com/a/img924/7901/R6u2Bq.png',
                 found: 'https://imageshack.com/a/img924/2561/hD8g3T.png'
@@ -131,7 +140,33 @@ export default {
 
             userCoords: {},
 
-            infoToEdit: undefined
+            infoToEdit: undefined,
+
+            types: {
+                cats,
+                dogs,
+                birds
+            },
+            options: ['cat', 'dog', 'bird'],
+
+            markerInfo: {
+                nickname: '',
+                color: "#f210f8",
+                age: '',
+                name: '',
+                email: '',
+                tel: '',
+                photo: '',
+                found: false,
+                animal: '',
+                breed:'',
+                filteredBr: [],
+                toDelete: false
+            },
+
+            mode: 'new',
+
+            markerIndexToOp: undefined,
         }
     },
 
@@ -139,6 +174,30 @@ export default {
         'google-map': Map,
         'modal-window': Modal,
         'filter-component': Filters
+    },
+
+    computed:{
+        statusText(){
+            if(this.found){
+                return 'Found'
+            } else {
+                return 'Lost'
+            }
+        },
+        breeds(){
+            if(this.markerInfo.animal && (this.markerInfo.filteredBr.length  == 0)){
+                return this.types[`${this.markerInfo.animal.toLowerCase()}s`]
+            } else {
+                if(this.markerInfo.filteredBr.length === 0) return []
+                if(this.markerInfo.filteredBr.length > 0){
+                    return this.markerInfo.filteredBr
+                } else {
+                    return this.types[`${this.markerInfo.animal.toLowerCase()}s`]
+                }
+            }
+
+        }
+
     },
 
     watch: {
@@ -213,23 +272,35 @@ export default {
             this.canAddNewMarkers = !this.canAddNewMarkers
         },
 
-        addNewMarker(o){
-            this.newMarker.info = {
-                photo: o.photo,
-                animal: o.animal,
-                breed: o.breed,
-                age: o.age,
-                color: o.color,
-                name: o.name,
-                tel: o.tel,
-                email: o.email,
-                found: o.found,
-            }
+        addNewMarker(){
+            this.newMarker.info ={}
+
+            let fields = ['photo', 'animal', 'breed', 'age', 'color', 'name', 'tel', 'email', 'found','nickname']
+            fields.forEach(fl => {
+                this.newMarker.info[fl] = this.markerInfo[fl]
+            })
+
             this.newMarker.icon = this.icons[`${this.newMarker.info.found ? 'found' : 'lost'}`]
+            this.newMarker.index = this.indexCounter
 
             this.markers.push(this.newMarker)
 
             this.indexCounter++
+
+            this.newMarker = {}
+            this.newMarker.position = {}
+        },
+
+        deleteMarker(){
+            for(let i = 0 ; i < this.markers.length ; i++){
+                if(this.markers[i].index === this.markerIndexToOp){
+                    let newOne = [...this.markers.slice(0 , i), ...this.markers.slice(i+1)]
+                    this.markers = newOne
+                    this.putToLocalStorage()
+                    this.cleanInfoMarkerState()
+                    return
+                }
+            }
         },
 
         filterFn(arr, filterObj){
@@ -247,6 +318,15 @@ export default {
             return res
         },
 
+        filterBreeds(ev){
+            this.markerInfo.breed = ev.target.value
+            this.markerInfo.filteredBr = this.types[`${this.markerInfo.animal.toLowerCase()}s`].filter(e => e.toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1)
+        },
+
+        handleBreedOption(val){
+            this.markerInfo.breed = val
+        },
+
         putToLocalStorage(){
             let t = localStorage.getItem('markers')
             if(t){
@@ -259,6 +339,23 @@ export default {
             let t = localStorage.getItem('markers')
             if(t){
                 this.markers = [...JSON.parse(t)]
+            }
+        },
+
+        cleanInfoMarkerState(){
+            this.markerInfo = {
+                nickname: '',
+                color: "#f210f8",
+                age: '',
+                name: '',
+                email: '',
+                tel: '',
+                photo: '',
+                found: false,
+                animal: '',
+                breed:'',
+                filteredBr: [],
+                toDelete: false
             }
         }
     }

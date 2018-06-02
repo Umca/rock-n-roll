@@ -5,7 +5,7 @@
                 <input type="search" id="breed_search"
                     name="breed_search"
                     @input="handleInput"
-                    :value="chosenBreed" 
+                    :value="breed" 
                     placeholder="Choose breed"
                 >
             </label> 
@@ -17,7 +17,7 @@
 </template>
 <script>
 export default {
-    props: ['breeds', 'handleInput','chosenBreed', 'handleOption'],
+    props: ['breeds', 'handleInput','breed', 'handleOption'],
 }
 </script>
 <style>

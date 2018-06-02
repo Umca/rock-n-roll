@@ -16,8 +16,7 @@
                                         required
                                         name="animal" 
                                         class="select-field"
-                                        @change="handleAnimal"
-                                        :value="animal"
+                                        v-model="markerInfo.animal"
                                         
                                     >
                                         <option disabled selected class="disabled" value=""> Choose animal</option>
@@ -27,16 +26,16 @@
                                     </select>
                                 </label>
 
-                                <breed-select 
-                                    v-show = "breed.length > 0"
+                                <breed-select
+                                    v-show="breeds.length > 0" 
                                     :handleInput="filterBreeds"
-                                    :chosenBreed="chosenBreed"
-                                    :handleOption="handleOption"
-                                    :breeds = "breed"
+                                    :breed="markerInfo.breed"
+                                    :handleOption="handleBreedOption"
+                                    :breeds = "breeds"
                                 ></breed-select>
 
                                 <input-field
-                                    v-model="nickname"
+                                    v-model="markerInfo.nickname"
                                     type="text"
                                     label="Animal name"
                                     name="nickname"
@@ -44,7 +43,7 @@
                                 ></input-field>
 
                                 <input-field
-                                    v-model="age"
+                                    v-model="markerInfo.age"
                                     type="number"
                                     label="Animal age"
                                     name="age"
@@ -53,7 +52,7 @@
                                 ></input-field>
 
                                 <input-field
-                                    v-model='photo'
+                                    v-model='markerInfo.photo'
                                     type="url"
                                     label="Photo URL"
                                     name="photo"
@@ -65,11 +64,11 @@
                                     <input type="color" 
                                     name="color"  
                                     class="input-field"
-                                    v-model='color'
+                                    v-model='markerInfo.color'
                                     >
                                 </label>
                                 <div class="status-container">
-                                    <input type="checkbox" name="status" id="status" v-model='found'>
+                                    <input type="checkbox" name="status" id="status" v-model='markerInfo.found'>
                                     <label for="status">
                                         <span >{{statusText}}</span>
                                         <span class="status"></span>
@@ -81,7 +80,7 @@
                                 <legend>Your contacts</legend>
     
                                 <input-field
-                                    v-model="name"
+                                    v-model="markerInfo.name"
                                     type="text"
                                     name="name"
                                     label="Name"
@@ -89,14 +88,14 @@
                                 ></input-field>
       
                                 <input-field
-                                    v-model="email"
+                                    v-model="markerInfo.email"
                                     type="text"
                                     name="email"
                                     label="Email"
                                 ></input-field>
 
                                 <input-field
-                                    v-model="tel"
+                                    v-model="markerInfo.tel"
                                     type="tel"
                                     name="tel"
                                     label="Telephone"
@@ -114,8 +113,8 @@
                                 value="Save" 
                                 />
                             </label>
-                            <label class="popup-delete" v-show="info">Delete
-                                <input type="checkbox" name="toDelete" v-model='toDelete'/>
+                            <label class="popup-delete" v-show="mode === 'edit'">Delete
+                                <input type="checkbox" name="toDelete" v-model='markerInfo.toDelete'/>
                                 <span class="checkmark"></span>
                             </label>
                         </div>
@@ -133,69 +132,15 @@
 <script>
 import BreedSelect from './BreedSelect'
 import InputField from './InputField'
-import { cats, dogs, birds } from '../utils/data'
+
 
 export default {
-    
-    data(){
-        return {
-            types: {
-                cats,
-                dogs,
-                birds
-            },
-            options: ['cat', 'dog', 'bird'],
-            chosenBreed:'',
-            animal: '',
-            color: "#f210f8",
-            age: '',
-            name: '',
-            email: '',
-            tel: '',
-            photo: '',
-            nickname:'',
-            found: false,
 
-            filteredBr: [],
-
-            toDelete: false
-        }
-    },
-
-    computed:{
-        statusText(){
-            if(this.found){
-                return 'Found'
-            } else {
-                return 'Lost'
-            }
-        },
-        breed(){
-            if(this.animal && (this.filteredBr.length  == 0)){
-                return this.types[`${this.animal.toLowerCase()}s`]
-            } else {
-                if(this.filteredBr.length === 0) return []
-                if(this.filteredBr.length > 0){
-                    return this.filteredBr
-                } else {
-                    return this.types[`${this.animal.toLowerCase()}s`]
-                }
-            }
-
-        }
-
-    },
-
-    props: ['isShown', 'info'],
+    props: ['isShown', 'markerInfo', 'statusText', 'breeds', 'filterBreeds','handleBreedOption', 'mode'],
 
     components: {
         'breed-select': BreedSelect,
         'input-field':InputField
-    },
-
-    afterUpdate(){
-        debugger
-        console.log(this)
     },
 
     mounted(){
@@ -205,80 +150,15 @@ export default {
                 select.children[i].style.color= 'black'
             }
         }
-        let self = this
-        if(this.info){
-            Object.keys(this.info.info).forEach( key => {
-                if(key === 'breed'){
-                    this.chosenBreed = this.info.info.breed
-                }
-                if(key === 'animal'){
-                    // this.animal = this.info.info.animal.slice(0, 1) + this.info.info.animal.slice(1)
-                    // this.breed = this.types[this.animal]
-                }
-                this[key] = this.info.info[key]
-            })
-
-        }
     },
 
     methods: {
         close(){
             this.$parent.$emit('modal_closed')
-            this.cleanState()
-        },
-
-        handleAnimal(e){
-            debugger
-            this.animal = e.target.value
-            this.chosenBreed =""
-        },
-
-        filterBreeds(ev){
-            this.chosenBreed = ev.target.value
-            this.filteredBr = this.types[`${this.animal.toLowerCase()}s`].filter(e => e.toLowerCase().indexOf(ev.target.value.toLowerCase()) > -1)
-            // if(temp.length > 0){
-            //     this.breed = temp
-            // } else {
-            //     // this.breed = this.types[`${this.animal.toLowerCase()}s`]
-            // }
-        },
-
-        handleOption(val){
-            this.chosenBreed = val
         },
 
         save(e){
-            let result = {}
-            result.name = this.name
-            result.email = this.email
-            result.tel = this.tel
-            result.found = this.found
-
-            result.breed = this.chosenBreed
-            result.animal = this.animal
-            result.color = this.color === "#f210f8" ? false : this.color
-            result.age = this.age
-            result.photo = this.photo
-            result.nickname = this.nickname
-
-            this.$parent.$emit('new_marker', {
-                    result
-                })
-            this.cleanState()
-        },
-
-        cleanState(){
-            this.chosenBreed = ''
-            this.animal = ''
-            this.color = "#f210f8"
-            this.age = ''
-            this.name = ''
-            this.email = ''
-            this.tel = ''
-            this.photo = ''
-            this.found= false
-            this.nickname = ""
-            this.filteredBr = []
+            this.$parent.$emit(`${this.mode}_marker`)
         },
 
         invalideMsg(ev){
