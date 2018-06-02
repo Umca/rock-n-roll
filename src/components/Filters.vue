@@ -62,6 +62,7 @@
                 v-model='filters.color'
                 >
             </label>
+            <hr color= "#ccc" size = "1">
             <div class="radio-container">
                 <radio
                     label="Found"
@@ -189,14 +190,14 @@ export default {
         position: absolute;
         z-index: 1;
         top: 0;
-        left: 285;
+        left: 0;
         border: 1px solid #ccc;
         opacity: 1;
         transition:  left 0.3s ;
         font-family: 'Lato', 'Arial', sans-serif;
     }
     .active{
-        left: 28px;
+        left: -256px;
     }
     .filters{
         padding: 10px 1em;
