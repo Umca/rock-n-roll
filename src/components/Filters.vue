@@ -46,6 +46,7 @@
             ></input-field>
 
             <input-field
+                v-show = "userCoords.lat"
                 v-model="filters.radius"
                 type="number"
                 label="Within the radius, km"
@@ -102,7 +103,7 @@ const initialFiltersState = {
     radius: undefined
 }
 export default {
-    props: ['isShown'],
+    props: ['isShown', 'userCoords'],
     components: {
         'breed-select': BreedSelect,
         'input-field':InputField,

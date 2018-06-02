@@ -49,7 +49,7 @@ export default {
         return {
             center: { lat: 50, lng: 30 },
             options: {
-                zoom: 10,
+                zoom: 8,
                 mapTypeControl: false,
                 fullscreenControl: false,
                 streetViewControl: false,
@@ -197,7 +197,7 @@ export default {
                         </div>
                         <div class="string">
                             <div>Color: </div>
-                            <div style="background: ${m.info.color}; content:''; width: 13px; height:13px"></div>
+                            <div style="background: ${m.info.color}; content:''; width: 13px; height:13px; border: 1px solid #ccc;"></div>
                         </div>
                     </div>
                 </div>
@@ -211,11 +211,11 @@ export default {
                         </p>
                         <button class="info-edit" onclick=${this.editInfo}>Edit</button>
                     </div>
-                    <div class='info-foot'>
+                </div>
+                <div class='info-foot'>
                         <p>Contact us if you want to help.</p>
                         <p>E-mail: qwerty@gmail.com</p>
                         <p>Tel.: 044 765 999 17</p>
-                    </div>
                 </div>
             </div>
             `;
@@ -270,7 +270,7 @@ export default {
     font-family: 'Lato', sans-serif;
     display: grid;
     grid-template-columns: 40% 60%;
-    grid-template-rows: 100%;
+    grid-template-rows: auto 80px;
 }
 .info-animal-card{
     grid-column-start: 1;
@@ -304,12 +304,6 @@ export default {
     
 }
 
-.info-other{
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 65px auto 80px;
-}
-
 .info-head {
     grid-row-start: 1;
     grid-row-end: 2;
@@ -329,6 +323,7 @@ export default {
 
 .info-main p{
     line-height: 20px;
+    font-size: 16px;
 }
 
 .info-main .info-edit{
@@ -347,10 +342,8 @@ export default {
 }
 
 .info-foot {
-    grid-row-start: 3;
-    grid-row-end: 4;
     grid-column-start: 1;
-    grid-column-start: 1;
+    grid-column-end: 3;
     padding: 15px 16px;
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQIW2M8cnjffxtbJ0YGKAAzkAXhMjBBuABMJQAWEA9J3TkpgAAAAABJRU5ErkJggg==);
     color: black;
