@@ -1,7 +1,7 @@
 {
-    "name": "Tablature editor",
-    "description": "Awesome tablature editor ever",
-    "short_name": "Editor",
+    "name": "Pet serch",
+    "description": "Awesome pet search service ever",
+    "short_name": "Pet search",
     "lang": "en-GB",
     "dir": "ltr",
     "icons": [
