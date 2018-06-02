@@ -28,11 +28,22 @@
         body:first-child{
             position: relative;
         }
+
+        .loader{
+            background: url('./static/calm.webp'), url('./static/calm.jpg') no-repeat;
+            background-size: contain;
+            content: '';
+            width: 100%;
+            height: 100%;
+        }
         
     </style>
 </head>
 <body>
-    <div id = 'app1'></div>
+    <div id = 'app1'>
+        <div class="loader">
+        </div>
+    </div>
     <noscript>
         You don't have javascript enabled. Please, enable it if you want to try this app. =)
     </noscript>

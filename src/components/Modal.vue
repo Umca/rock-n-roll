@@ -53,7 +53,7 @@
 
                                 <input-field
                                     v-model='markerInfo.photo'
-                                    type="url"
+                                    type="text"
                                     label="Photo URL"
                                     name="photo"
                                     isRequired="true"
@@ -402,7 +402,7 @@ input[type=color]{
 }
 .popup-foot {
     padding: 15px 16px;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 21px;
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQIW2M8cnjffxtbJ0YGKAAzkAXhMjBBuABMJQAWEA9J3TkpgAAAAABJRU5ErkJggg==);
 }

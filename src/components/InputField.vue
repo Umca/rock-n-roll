@@ -1,5 +1,5 @@
 <template>
-    <label :for="name">
+    <label :for="name" :aria-label="label">
         <input :type="type" 
             :name="name"
             :value="value"

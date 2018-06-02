@@ -2,7 +2,8 @@
     <div class="breed_finder"> 
         <div class="breed_finder_header"> 
             <label> 
-                <input type="search" id="breed_search"
+                <input type="search" 
+                    :id="breed"
                     name="breed_search"
                     @input="handleInput"
                     :value="breed" 
@@ -69,7 +70,7 @@ export default {
         border-bottom: 1px solid #8fbefa;
     }
     .breed_finder .breed_finder_results li {
-        font-size: 12px;
+        font-size: 16px;
         padding: 2px 0;
         list-style-type: none;
         cursor: pointer;

@@ -249,6 +249,11 @@ export default {
             this.cleanInfoMarkerState()
         })
 
+        this.$on('user_position', (ev) => {
+            this.userCoords.lat = ev.lat
+            this.userCoords.lng = ev.lng
+        })
+
         this.$on('new_markers_mode', () => this.toggleAddMarkersMode())
 
         this.$on('filters_toggle', () => this.toggleFilters())

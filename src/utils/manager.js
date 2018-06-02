@@ -12,7 +12,7 @@ const load = new Promise((resolve, reject) => {
         	let url = `https://maps.googleapis.com/maps/api/js?key=${API_KEYS.GOOGLE_MAPS}&language=en&region=GB`
 
         	googleMapScript.setAttribute('src', url)
-        	googleMapScript.setAttribute('async', '')
+        	googleMapScript.setAttribute('async', true)
             googleMapScript.setAttribute('defer', '')
             
             googleMapScript.onload = () => {

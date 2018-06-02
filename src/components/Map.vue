@@ -9,7 +9,9 @@
                 margin: 0 auto;
                 background: gray;"  
             @click='emitToOpenModal'
-            @dragstart="cancelMarkersAdding"    
+            @dragstart="cancelMarkersAdding" 
+            @scroll.passive="onScroll"   
+            @mousewheel.passive="onMouseWheel"  
         >
             <gmap-marker
                 v-for="m in markers"
@@ -94,7 +96,12 @@ export default {
                 },
                 true
             ));
+            let iframe = document.querySelector('iframe')
+            if(iframe){
+                iframe.title = "google-map"
+            }
         })
+        
         this.geolocate()
     },
 
@@ -140,7 +147,7 @@ export default {
                 controlUI.appendChild(controlText);
             }
             
-            controlUI.addEventListener('click', cb);
+            controlUI.addEventListener('click', cb, {passive: true});
 
             return controlDiv
 
@@ -234,7 +241,7 @@ export default {
                     btn.addEventListener('click', (e) => {
                     e.target.hasListener = true
                     this.edit()
-                })
+                }, {passive: true})
             }
             
 
@@ -245,6 +252,10 @@ export default {
             this.$parent.$emit('start_edition', this.clickedMarker)
             this.clickedMarker = undefined
         },
+
+        onScroll(){},
+
+        onMouseWheel(){}
     }
 }
 </script>
