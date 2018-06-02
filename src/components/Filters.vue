@@ -55,7 +55,7 @@
 
             ></input-field>
 
-            <label for="color">
+            <label for="color" class="color-label">
                 <span>Color</span>
                 <input type="color" 
                 name="color"  
@@ -212,6 +212,10 @@ export default {
     .filters-head h2{
         font-size: 1.15em;
     }
+    .color-label{
+        display: flex;
+    }
+
 
 </style>
 

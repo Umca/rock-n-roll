@@ -17,6 +17,7 @@
                                         name="animal" 
                                         class="select-field"
                                         v-model="markerInfo.animal"
+                                        @invalid="invalideMsg"
                                         
                                     >
                                         <option disabled selected class="disabled" value=""> Choose animal</option>
@@ -59,7 +60,7 @@
                                     isRequired="true"
                                 ></input-field>
 
-                                <label for="color">
+                                <label for="color" class='color-label'>
                                     <span>Color</span>
                                     <input type="color" 
                                     name="color"  
@@ -279,6 +280,10 @@ input[type=color]{
     width: 30px;
     border: none;
     background-color: white;
+}
+
+.color-label{
+    display: flex;
 }
 .status-container{
     position: relative;
