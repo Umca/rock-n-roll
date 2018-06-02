@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative; width: 800px; margin: auto; ">
-        <filter-component :isShown = 'filtersOpened'></filter-component>
+        <filter-component :isShown = 'filtersOpened' :userCoords = "userCoords"></filter-component>
         <google-map :markers='filtered' :canAddNewMarkers="canAddNewMarkers" :statusText="statusText"></google-map>
         <modal-window 
             :isShown = 'modalOpened' 
@@ -42,14 +42,15 @@ export default {
                     icon: 'https://imageshack.com/a/img924/7901/R6u2Bq.png',
                     info: {
                         found: false,
-                        photo: "https://i.imgur.com/Qha68YE.jpg",
-                        animal: 'cat',
-                        color: '#2d292b',
+                        photo: "https://i.imgur.com/gOouABvb.jpg",
+                        animal: 'dog',
+                        color: '',
                         age: 1,
-                        breed: "home",
-                        name: "olya",
-                        nickname: 'Black',
-                        email: "fhkfjhf@jfjk"
+                        breed: "",
+                        name: "Olya",
+                        nickname: 'Kiki',
+                        email: "qqqq@rambler.ru",
+                        tel: "032178951"
                     }
                 },
                 {
@@ -61,14 +62,14 @@ export default {
                     icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
                     info: {
                         found: true,
-                        photo: "https://i.imgur.com/oaHmbG7.jpg",
+                        photo: "https://i.imgur.com/WDcEBpab.jpg",
                         animal: 'dog',
-                        color: '#191216',
-                        age: 1,
-                        breed: "home",
-                        name: "olya",
-                        nickname: 'zaya',
-                        email: "fhkfjhf@jfjk"
+                        color: '',
+                        age: 1.2,
+                        breed: "",
+                        name: "Alex",
+                        nickname: 'Elvis',
+                        email: "898452418"
                     }
                 },
                 {
@@ -80,14 +81,15 @@ export default {
                     icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
                     info: {
                         found: true,
-                        photo: "https://i.imgur.com/oaHmbG7.jpg",
-                        animal: 'dog',
-                        color: '#bf2f81',
-                        age: 1,
-                        breed: "home",
-                        name: "olya",
-                        nickname: '',
-                        email: "fhkfjhf@jfjk"
+                        photo: "https://i.imgur.com/Qha68YEb.jpg",
+                        animal: 'cat',
+                        color: '',
+                        age: 5,
+                        breed: "",
+                        name: "Zoya",
+                        nickname: 'Prada',
+                        email: "",
+                        tel: "4624786358"
                     }
                 },
                 {
@@ -99,14 +101,15 @@ export default {
                     icon: 'https://imageshack.com/a/img924/2561/hD8g3T.png',
                     info: {
                         found: true,
-                        photo: "https://i.imgur.com/oaHmbG7.jpg",
-                        animal: 'cat',
-                        color: 'black',
+                        photo: "https://i.imgur.com/BzGR3kJb.jpg",
+                        animal: 'dog',
+                        color: '#ffffff',
                         age: 1,
-                        breed: "home",
-                        name: "olya",
-                        nickname: '',
-                        email: "fhkfjhf@jfjk"
+                        breed: "Husky",
+                        name: "Antony",
+                        nickname: 'Boggi',
+                        email: "fantony@yahoo.com",
+                        tel: '788556558'
                     }
                 },
                 {
@@ -118,14 +121,15 @@ export default {
                     icon: 'https://imageshack.com/a/img924/7901/R6u2Bq.png',
                     info: {
                         found: false,
-                        photo: "https://i.imgur.com/oaHmbG7.jpg",
-                        animal: 'dog',
-                        color: 'black',
-                        age: 1,
-                        breed: "barbet",
-                        name: "olya",
-                        nickname: 'smith',
-                        email: "fhkfjhf@jfjk"
+                        photo: "https://i.imgur.com/Di4vgUy.jpg",
+                        animal: 'cat',
+                        color: '',
+                        age: 1.8,
+                        breed: "",
+                        name: "Elli",
+                        nickname: 'Simba',
+                        email: "elli@gmail.com",
+                        tel: "567800890"
                     }
                 }
             ],
@@ -259,8 +263,6 @@ export default {
         this.$on('filters_toggle', () => this.toggleFilters())
 
         this.$on('filter_apply', (ev) => {
-            this.userCoords.lat = 50.4514007
-            this.userCoords.lng = 30.352864900000004
 
             this.filtered = this.filterFn(this.markers, ev)
         })
