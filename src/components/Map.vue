@@ -169,7 +169,6 @@ export default {
 
             this.clickedMarker = m
 
-
             this.infoWindowTemplate = `
             <div class="info-content">
                 <div class="info-animal-card">
@@ -243,7 +242,7 @@ export default {
 
         edit(m){
             this.infoWinOpen = false
-            this.$parent.$emit('marker_edit', this.clickedMarker)
+            this.$parent.$emit('start_edition', this.clickedMarker)
             this.clickedMarker = undefined
         },
     }

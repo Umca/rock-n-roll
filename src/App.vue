@@ -221,14 +221,32 @@ export default {
             this.openModal()
         })
 
-        this.$on('modal_closed', () => this.closeModal())
-
-        this.$on('new_marker', (ev) => {
-
+        this.$on('modal_closed', () => {
+            this.mode = 'new'
             this.closeModal()
-            this.addNewMarker(ev.result)
+            this.cleanInfoMarkerState()
+        })
+
+        this.$on('new_marker', () => {
+            this.closeModal()
+            this.addNewMarker()
+            this.cleanInfoMarkerState()
 
             this.putToLocalStorage()
+        })
+
+        this.$on('edit_marker', () => {
+            this.closeModal()
+
+            if(this.markerInfo.toDelete){
+                this.deleteMarker()
+                return
+            }
+
+            let toEdit = this.markers.filter( m => m.index === this.markerIndexToOp)[0]
+            Object.keys(this.markerInfo).forEach(key => toEdit.info[key] = this.markerInfo[key])
+            
+            this.cleanInfoMarkerState()
         })
 
         this.$on('new_markers_mode', () => this.toggleAddMarkersMode())
@@ -242,8 +260,15 @@ export default {
             this.filtered = this.filterFn(this.markers, ev)
         })
 
-        this.$on('marker_edit', (ev) => {
-            this.infoToEdit =  ev
+        this.$on('start_edition', (ev) => {
+            this.mode = 'edit'
+            this.markerIndexToOp = ev.index
+
+
+            Object.keys(ev.info).forEach(key => {
+                this.markerInfo[key] = ev.info[key]
+            })
+
             this.openModal()
         })
     },
